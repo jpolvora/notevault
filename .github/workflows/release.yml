@@ -38,7 +38,8 @@ jobs:
       - name: Build and Publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run build:win -- --publish always
+        run: npm run package:win -- --publish always
+
 
       - name: Upload Build Artifact
         if: always()
