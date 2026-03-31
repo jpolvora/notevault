@@ -6,8 +6,8 @@ export const EncryptionSettings: React.FC = () => {
   const { settings, updateSettings } = useUIStore();
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [passphrase, setPassphrase] = useState('');
-  const [newPassphrase, setNewPassphrase] = useState('');
   const [showStatus, setShowStatus] = useState<string | null>(null);
+
 
   const checkStatus = async () => {
     const unlocked = await window.api.isUnlocked();
