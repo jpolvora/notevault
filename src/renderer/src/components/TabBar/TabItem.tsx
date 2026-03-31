@@ -86,6 +86,16 @@ export const TabItem = ({ tab, isActive, onClick }: TabItemProps) => {
     { label: 'Blue', color: 'blue', onClick: () => setColor(tab.id, 'blue') },
     { label: 'Purple', color: 'purple', onClick: () => setColor(tab.id, 'purple') },
     { label: 'Gray', color: 'gray', onClick: () => setColor(tab.id, 'gray') },
+    { label: 'Group', onClick: () => {}, divider: true },
+    { label: 'New Group', onClick: () => {
+        const id = useTabStore.getState().addGroup('New Group', 'blue');
+        updateTab(tab.id, { groupId: id });
+    }},
+    ...(useTabStore.getState().groups.map(g => ({
+        label: `Add to: ${g.label}`,
+        onClick: () => updateTab(tab.id, { groupId: g.id })
+    }))),
+    ...(tab.groupId ? [{ label: 'Remove from group', onClick: () => updateTab(tab.id, { groupId: undefined }) }] : [])
   ];
 
   return (

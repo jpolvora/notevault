@@ -256,3 +256,64 @@
   align-items: center;
   gap: 4px;
 }
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  height: 24px;
+  border-radius: 12px;
+  background-color: var(--group-color);
+  color: #000; /* High contrast for vibrant colors */
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 0 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.groupHeader:hover {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+}
+
+.groupHeader.collapsed {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--group-color);
+  color: var(--group-color);
+  box-shadow: none;
+  padding: 0 8px;
+}
+
+.groupLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.groupLabelInput {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  width: 60px;
+  text-align: center;
+  outline: none;
+}
+
+.actionsBox {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding: 0 4px;
+  background: var(--color-surface);
+  position: sticky;
+  right: 0;
+  height: 100%;
+  z-index: 10;
+  border-left: 1px solid var(--color-border);
+}

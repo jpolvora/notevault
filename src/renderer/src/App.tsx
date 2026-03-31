@@ -12,7 +12,7 @@ import { useTabStore } from './store/tabs';
 import { useUIStore } from './store/ui';
 
 export const App = () => {
-  const { setTabs, addTab, setActiveTab, tabs, activeTabId, removeTab } = useTabStore();
+  const { setTabs, addTab, setActiveTab, tabs, activeTabId, removeTab, setGroups } = useTabStore();
   const { 
     setSettings, 
     settings, 
@@ -34,6 +34,9 @@ export const App = () => {
 
     const savedSettings = await window.api.loadSettings();
     setSettings(savedSettings);
+
+    const savedGroups = await window.api.loadTabGroups();
+    setGroups(savedGroups);
 
     if (!unlockRequired) {
       const savedTabs = await window.api.loadTabs();
