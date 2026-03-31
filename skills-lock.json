@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "github-actions-docs": {
+      "source": "xixu-me/skills",
+      "sourceType": "github",
+      "computedHash": "ad54a7c9deaa654271c885a42b7cff41f538b7e0fa0e5a5113e7a6719e9d9a54"
+    }
+  }
+}
