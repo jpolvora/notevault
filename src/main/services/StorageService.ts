@@ -29,6 +29,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   autoSaveInterval: 300,
   startMinimized: false,
   closeToTray: true,
+  autoStart: false,
   globalShortcut: 'Ctrl+Shift+N',
   syncEnabled: false,
   syncInterval: 30000,
