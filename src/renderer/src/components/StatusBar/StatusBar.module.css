@@ -1,0 +1,45 @@
+.container {
+  height: var(--statusbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 0 12px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.left, .right {
+  display: flex;
+  align-items: center;
+}
+
+.item {
+  margin-right: 16px;
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-right: 8px;
+}
+
+.actionBtn:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.divider {
+  width: 1px;
+  height: 12px;
+  background-color: var(--color-border);
+  margin-right: 12px;
+  opacity: 0.5;
+}

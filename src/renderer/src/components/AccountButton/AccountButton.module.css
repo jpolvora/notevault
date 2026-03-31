@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.syncInfo {
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.divider {
+  width: 1px;
+  height: 12px;
+  background-color: var(--color-border);
+  opacity: 0.5;
+}
+
+.accountBtn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--color-text);
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+  font-size: 11px;
+}
+
+.accountBtn:hover {
+  background-color: var(--color-bg-hover);
+  border-color: var(--color-border);
+}
+
+.signInBtn {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.signInBtn:hover {
+  filter: brightness(1.2);
+}
+
+.signInBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.email {
+  font-weight: 500;
+}

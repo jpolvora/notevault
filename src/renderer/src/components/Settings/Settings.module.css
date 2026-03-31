@@ -1,0 +1,197 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 200ms ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.container {
+  width: 850px;
+  max-width: 95%;
+  height: 600px;
+  background: var(--bg-primary, #090909);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 12px;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.6);
+  display: flex;
+  overflow: hidden;
+  animation: slideIn 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sidebar {
+  width: 200px;
+  background: rgba(255, 255, 255, 0.03);
+  border-right: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar h3 {
+  padding: 0 12px;
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar nav button {
+  background: transparent;
+  border: none;
+  color: var(--text-primary, #ffffff);
+  padding: 8px 12px;
+  text-align: left;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: all 120ms;
+}
+
+.sidebar nav button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 1;
+}
+
+.sidebar nav button.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-accent, #0078d4);
+  opacity: 1;
+  font-weight: 500;
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  opacity: 0.5;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 8px;
+  line-height: 1;
+}
+
+.closeButton:hover { opacity: 1; }
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 600px;
+}
+
+.section h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.settingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.settingInfo label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.description {
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.input, .select, .numberInput {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 4px;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus, .select:focus, .numberInput:focus {
+  border-color: var(--color-accent, #0078d4);
+}
+
+.sliderContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 200px;
+}
+
+.sliderContainer input { flex: 1; }
+.sliderContainer span { width: 35px; font-size: 13px; opacity: 0.7; }
+
+.segmentedControl {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.segmentedControl button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  opacity: 0.6;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.segmentedControl button.active {
+  background: var(--color-accent, #0078d4);
+  opacity: 1;
+}

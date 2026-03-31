@@ -1,0 +1,37 @@
+@import '../styles/tokens.css';
+
+body {
+  transition: background-color 0.3s ease;
+}
+
+[data-theme='dark'] body {
+  background-color: rgba(0, 0, 0, 0.2); /* Slight tint for dark Mica */
+}
+
+[data-theme='light'] body {
+  background-color: rgba(255, 255, 255, 0.4); /* Slight tint for light Mica */
+}
+
+/* Custom scrollbar for Monaco and other elements */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+.mica-effect {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}

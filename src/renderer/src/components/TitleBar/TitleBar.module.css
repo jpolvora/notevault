@@ -1,0 +1,65 @@
+.container {
+  height: var(--titlebar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  color: var(--color-text-primary);
+}
+
+.dragRegion {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  -webkit-app-region: drag;
+}
+
+.logo {
+  font-size: 16px;
+  margin-right: 8px;
+  color: var(--color-accent);
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.controls {
+  display: flex;
+  height: 100%;
+  -webkit-app-region: no-drag;
+}
+
+.controlBtn {
+  width: 46px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+  color: var(--color-text-primary);
+}
+
+.controlBtn:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.controlBtn:active {
+  background-color: var(--color-surface-active);
+}
+
+.closeBtn:hover {
+  background-color: #e81123 !important;
+  color: white !important;
+}
+
+.closeBtn:active {
+  background-color: #f1707a !important;
+  color: white !important;
+}
