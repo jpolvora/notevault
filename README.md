@@ -38,17 +38,33 @@ $ npm install
 $ npm run dev
 ```
 
-### 3. Build & Distribution
-Generate a production-ready installer for your platform.
+### 3. Build & Packaging
+Generate production builds or installers for your platform.
+
+#### 📦 Development Builds (Unpacked)
+Use these for quick verification of the final asset structure without generating a full installer.
 ```bash
-# For Windows (Includes Windows 11 Mica material support)
+# Windows
 $ npm run build:win
 
-# For macOS
+# macOS
 $ npm run build:mac
 
-# For Linux
+# Linux
 $ npm run build:linux
+```
+
+#### 🚀 Distributable Installers
+Generate the final setup files for distribution.
+```bash
+# Windows (.exe)
+$ npm run package:win
+
+# macOS (.dmg)
+$ npm run package:mac
+
+# Linux (.AppImage, .deb)
+$ npm run package:linux
 ```
 
 ## 🏗️ Architecture

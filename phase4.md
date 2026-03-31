@@ -281,30 +281,27 @@ CSS transitions for tab bar interactions (keep under 150ms to feel native, not s
 
 ### NSIS Installer (electron-builder)
 
+The build process is split into two stages:
+1. **Build Unpacked (`npm run build:win`)**: Compiles the source and creates the unpacked folder structure in `dist/win-unpacked`. This is the primary command for debugging the final asset structure.
+2. **Package Installer (`npm run package:win`)**: Generates the final `.exe` installer for distribution.
+
 ```javascript
-// electron-builder.config.js
-module.exports = {
-  appId: 'com.notevault.app',
-  productName: 'NoteVault',
-  win: {
-    target: [{ target: 'nsis', arch: ['x64', 'arm64'] }],
-    icon: 'assets/icons/icon.ico',
-    signingHashAlgorithms: ['sha256'],
-    certificateSubjectName: 'NoteVault',  // EV certificate CN
-  },
-  nsis: {
-    oneClick: false,
-    allowToChangeInstallationDirectory: true,
-    createDesktopShortcut: true,
-    createStartMenuShortcut: true,
-    shortcutName: 'NoteVault',
-  },
-  publish: {
-    provider: 'github',
-    owner: '<your-github-org>',
-    repo: 'notevault',
-  },
-};
+// package.json (relevant scripts)
+{
+  "build:win": "npm run build && electron-builder --win --dir",
+  "package:win": "npm run build && electron-builder --win"
+}
+```
+
+```javascript
+// electron-builder.yml (already exists)
+appId: com.notevault.app
+productName: notevault
+win:
+  executableName: notevault
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
 ```
 
 ### Auto-Update (electron-updater)

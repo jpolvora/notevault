@@ -21,7 +21,8 @@ NoteVault development is structured into incremental **Phases** (1.1, 2.0, etc.)
 Agents have access to a suite of professional tools:
 - **`semantic_coding`**: Deep understanding of the TypeScript types and React component tree.
 - **`file_management`**: Atomically updating files with precise line-level control.
-- **`shell_access`**: Running tests (`npm test`) and development servers (`npm run dev`) to validate changes in real-time.
+- **`shell_access`**: Running tests (`npm test`), dev servers (`npm run dev`), build verification (`npm run build:win`), and production packaging (`npm run package:win`).
+- **`build_lifecycle`**: Managing the separation between fast unpacked builds and full installer generation.
 
 ### 5. Future AI Extensions
 - **AI-Powered Tab Labeling**: An agent that automatically suggests a label for a new tab based on the first few words typed.
