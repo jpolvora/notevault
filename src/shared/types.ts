@@ -90,6 +90,7 @@ export interface UserSettings {
   autoSaveInterval: number; // ms, default: 300
   startMinimized: boolean;
   closeToTray: boolean;
+  autoStart: boolean;
   globalShortcut: string;  // Default: 'Ctrl+Shift+N'
   // Sync & crypto
   syncEnabled: boolean;

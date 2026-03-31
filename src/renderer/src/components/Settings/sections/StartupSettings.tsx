@@ -16,6 +16,19 @@ export const StartupSettings: React.FC = () => {
 
       <div className={styles.settingRow}>
         <div className={styles.settingInfo}>
+          <label>Auto Start with Windows</label>
+          <span className={styles.description}>Launch NoteVault automatically when you log in to Windows.</span>
+        </div>
+        <input 
+          type="checkbox" 
+          checked={settings.autoStart}
+          onChange={(e) => updateSettings({ autoStart: e.target.checked })}
+          className={styles.checkbox}
+        />
+      </div>
+
+      <div className={styles.settingRow}>
+        <div className={styles.settingInfo}>
           <label>Start Minimized</label>
           <span className={styles.description}>Launch NoteVault silently in the system tray.</span>
         </div>

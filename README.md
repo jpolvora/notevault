@@ -2,7 +2,7 @@
 
 NoteVault is a high-performance, secure notepad designed for developers. It combines the aesthetics of Windows 11 Fluent design with the power of Monaco (VS Code) editor and AES-256-GCM encryption.
 
-## ✨ Latest Features (v1.0.1)
+## ✨ Latest Features (v1.0.4)
 
 ### 🎨 Organization & Search
 - **Tab Color Labels**: Group tasks with 7 color-coded markers.
@@ -22,11 +22,18 @@ NoteVault is a high-performance, secure notepad designed for developers. It comb
 
 ## 🚀 Getting Started
 
-### 1. Clone & Install
-Ensure you have Node.js (v18+) and npm installed.
+### 💾 Download & Install
+For the best experience, download the latest stable installer from our **[GitHub Releases](https://github.com/jpolvora/notevault/releases)** page.
+
+- **Current Version**: v1.0.4
+- **Platform**: Windows 11 / 10 (x64, arm64)
+
+### 🏗️ Local Development
+If you want to contribute or build from source, ensure you have Node.js (v20+) and npm installed.
+
 ```bash
 # Clone the repository
-$ git clone https://github.com/jone/notevault.git
+$ git clone https://github.com/jpolvora/notevault.git
 $ cd notevault
 
 # Install dependencies

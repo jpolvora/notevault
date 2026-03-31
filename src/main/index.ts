@@ -11,6 +11,7 @@ import { registerAuthHandlers } from './ipc/auth'
 import { registerSyncHandlers } from './ipc/sync'
 import { registerSettingsHandlers } from './ipc/settings'
 import { syncService } from './services/SyncService'
+import { systemService } from './services/SystemService'
 
 let mainWindow: BrowserWindow | null = null
 let isQuitting = false
@@ -94,29 +95,40 @@ app.whenReady().then(async () => {
   registerSyncHandlers()
   registerSettingsHandlers()
   
-  await syncService.init()
+  const initialSettings = storageService.getSettings()
+  systemService.init(initialSettings);
   
-  createWindow()
+  const shouldStartHidden = process.argv.includes('--hidden') && initialSettings.startMinimized;
+  if (!shouldStartHidden) {
+    createWindow()
+  }
 
   // Register tray service
-  if (mainWindow) {
-    new TrayService(mainWindow)
+  if (mainWindow || shouldStartHidden) {
+    if (shouldStartHidden && !mainWindow) {
+        createWindow();
+        const win = mainWindow as any as BrowserWindow; // Narrow manually for TS
+        if (win) win.hide();
+    }
     
-    // Windows 11 Accent Color
-    const { systemPreferences } = require('electron')
-    const updateAccentColor = () => {
-       const accent = systemPreferences.getAccentColor();
-       mainWindow?.webContents.executeJavaScript(
-         `document.documentElement.style.setProperty('--color-accent', '#${accent.slice(0, 6)}')`
-       );
-    };
-    updateAccentColor();
-    systemPreferences.on('accent-color-changed', updateAccentColor);
+    if (mainWindow) {
+        new TrayService(mainWindow)
+        
+        // Windows 11 Accent Color
+        const { systemPreferences } = require('electron')
+        const updateAccentColor = () => {
+           const accent = systemPreferences.getAccentColor();
+           mainWindow?.webContents.executeJavaScript(
+             `document.documentElement.style.setProperty('--color-accent', '#${accent.slice(0, 6)}')`
+           );
+        };
+        updateAccentColor();
+        systemPreferences.on('accent-color-changed', updateAccentColor);
+    }
   }
 
   // Global shortcut to show/hide window
-  const settings = storageService.getSettings()
-  globalShortcut.register(settings.globalShortcut || 'Ctrl+Shift+N', () => {
+  globalShortcut.register(initialSettings.globalShortcut || 'Ctrl+Shift+N', () => {
     if (mainWindow) {
       if (mainWindow.isVisible() && mainWindow.isFocused()) {
         mainWindow.hide()

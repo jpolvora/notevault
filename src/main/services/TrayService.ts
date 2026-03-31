@@ -1,6 +1,7 @@
 import { app, Menu, Tray, nativeImage, BrowserWindow } from 'electron';
 import { join } from 'path';
 import { storageService } from './StorageService';
+import { systemService } from './SystemService';
 
 export class TrayService {
   private tray: Tray | null = null;
@@ -45,6 +46,16 @@ export class TrayService {
         click: () => {
           const newSettings = { ...settings, closeToTray: !settings.closeToTray };
           storageService.setSettings(newSettings);
+          this.win.webContents.send('settings:sync', newSettings);
+          this.updateMenu();
+        }
+      },
+      {
+        label: settings.autoStart ? 'Auto Start: Enabled' : 'Auto Start: Disabled',
+        click: () => {
+          const newSettings = { ...settings, autoStart: !settings.autoStart };
+          storageService.setSettings(newSettings);
+          systemService.updateLoginSettings(newSettings);
           this.win.webContents.send('settings:sync', newSettings);
           this.updateMenu();
         }

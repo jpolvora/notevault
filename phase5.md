@@ -267,6 +267,23 @@ A Chrome/Edge extension for one-click sending of selected text or the full page 
 
 ---
 
+### 5.12 — Windows Integration: Autostart
+
+NoteVault can launch automatically on Windows login. If "Start Minimized" is enabled, it will launch hidden in the system tray.
+
+-   **Trigger**: Toggle in Settings → Startup or Tray menu toggle.
+-   **Implementation**: Electron `app.setLoginItemSettings` with `--hidden` argument if starting minimized.
+
+### 5.13 — Enhanced System Tray
+
+The system tray icon provides quick access to frequently used tabs and app settings.
+
+-   **Pinned Tabs**: Shows any pinned tabs in the context menu for one-click access.
+-   **Toggles**: Control "Close to Tray" and "Auto Start" directly from the tray.
+-   **Show/Hide**: Primary action (single-click) toggles window visibility.
+
+---
+
 ## Acceptance Criteria (v1.1 only)
 
 - [ ] Tab color label: right-click → pick color → colored dot appears on tab
@@ -279,6 +296,8 @@ A Chrome/Edge extension for one-click sending of selected text or the full page 
 - [ ] Right-click tab → "Show changes since last sync" → diff view opens with correct diffs
 - [ ] Diff view is read-only; closing it returns to normal edit mode
 - [ ] `.nvault` export/import round-trip: export vault, clear all tabs, import backup → all tabs restored correctly
+- [x] Autostart with Windows: toggling setting adds/removes app from login items
+- [x] Tray menu: Quick access to pinned tabs and toggles for "Close to Tray" / "Auto Start"
 
 ---
 

@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron';
 import { storageService } from '../services/StorageService';
+import { systemService } from '../services/SystemService';
 import { UserSettings } from '../../shared/types';
 
 export function registerSettingsHandlers() {
@@ -9,6 +10,7 @@ export function registerSettingsHandlers() {
 
   ipcMain.on('settings:update', (_, settings: UserSettings) => {
     storageService.setSettings(settings);
+    systemService.updateLoginSettings(settings);
     // Optionally: propagate to other windows if multi-window
   });
 }
