@@ -53,8 +53,13 @@ interface Tab {
   encrypted: boolean;      // Per-tab encryption flag
   syncId?: string;         // Google Drive file ID
   deletedAt?: number;      // Soft-delete timestamp (7-day trash)
+  archived: boolean;       // Archived state
   language: string;        // Monaco language ID, default: 'plaintext'
   viewState?: MonacoViewState; // In-memory only, not persisted
+  color?: string;          // Optional color label
+  groupId?: string;        // Optional group ID
+  lastSyncedContent?: string; // Phase 5 diff tracking
+  lastSyncedAt?: number;
 }
 
 interface MonacoViewState {
@@ -104,6 +109,9 @@ interface UserSettings {
   syncEnabled: boolean;
   syncInterval: number;    // ms, default: 30000
   encryptByDefault: boolean;
+  groupTabsByColor: boolean;
+  editorFontFamily: string;
+  editorFontSize: number;
 }
 ```
 
@@ -157,7 +165,8 @@ interface UserSettings {
 | [**Phase 2**](./phase2.md) | Encryption | Per-tab AES-256-GCM, unlock screen, key derivation | 1 week |
 | [**Phase 3**](./phase3.md) | Cloud Sync | Google OAuth, Drive sync, offline queue, multi-device | 1.5 weeks |
 | [**Phase 4**](./phase4.md) | Polish & Settings | Command palette, settings panel, language modes, build/distribution | 1.5 weeks |
-| [**Phase 5**](./phase5.md) | Power Features (v1.1+) | Tab groups, content search, export/import, diff view, future roadmap | 2 weeks |
+| [**Phase 5**](./phase5.md) | Power Features (v1.1+) | Tab groups, content search, export/import, diff view | 2 weeks |
+| [**Phase 6**](./phase6.md) | UX Polish & Utilities | Archiving, font customization, text utilities, auto-format | 1 week |
 
 Each phase document is fully self-contained: it lists its goals, deliverables, file changes, acceptance criteria, and any open questions specific to that phase.
 
