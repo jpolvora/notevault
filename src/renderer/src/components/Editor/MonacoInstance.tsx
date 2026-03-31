@@ -1,6 +1,7 @@
 import Editor, { OnMount } from '@monaco-editor/react';
 import { useRef, useEffect } from 'react';
 import * as monaco from 'monaco-editor';
+import { v4 as uuidv4 } from 'uuid';
 import { Tab } from '../../../../shared/types';
 import { useTabStore } from '../../store/tabs';
 import { useUIStore } from '../../store/ui';
@@ -70,10 +71,9 @@ export const MonacoInstance = ({ tab, isActive }: MonacoInstanceProps) => {
       id: 'utility-uuid',
       label: 'Utility: Insert UUID',
       contextMenuGroupId: 'utility',
-      run: async (ed) => {
+      run: (ed) => {
         const selection = ed.getSelection();
         if (!selection) return;
-        const { v4: uuidv4 } = require('uuid');
         ed.executeEdits('utility', [{ range: selection, text: uuidv4() }]);
       }
     });
@@ -157,3 +157,5 @@ export const MonacoInstance = ({ tab, isActive }: MonacoInstanceProps) => {
     />
   );
 };
+
+export default MonacoInstance;

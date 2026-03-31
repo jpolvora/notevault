@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import styles from './Settings.module.css';
 import { EditorSettings } from './sections/EditorSettings';
 import { AppearanceSettings } from './sections/AppearanceSettings';
+import { AutoSaveSettings } from './sections/AutoSaveSettings';
+import { EncryptionSettings } from './sections/EncryptionSettings';
+import { SyncSettings } from './sections/SyncSettings';
+import { StartupSettings } from './sections/StartupSettings';
+import { ShortcutsSettings } from './sections/ShortcutsSettings';
 
 interface Props {
   isOpen: boolean;
@@ -19,8 +24,12 @@ export const Settings: React.FC<Props> = ({ isOpen, onClose }) => {
     switch (activeSection) {
       case 'editor': return <EditorSettings />;
       case 'appearance': return <AppearanceSettings />;
-      // ... more
-      default: return <div className={styles.section}>Coming soon...</div>;
+      case 'auto-save': return <AutoSaveSettings />;
+      case 'encryption': return <EncryptionSettings />;
+      case 'sync': return <SyncSettings />;
+      case 'startup': return <StartupSettings />;
+      case 'shortcuts': return <ShortcutsSettings />;
+      default: return <EditorSettings />;
     }
   };
 
@@ -47,3 +56,5 @@ export const Settings: React.FC<Props> = ({ isOpen, onClose }) => {
     </div>
   );
 };
+
+export default Settings;

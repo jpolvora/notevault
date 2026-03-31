@@ -1,7 +1,7 @@
 # NoteVault — Master Specification
 ### A Secure, Synced, Multi-Tab Text Editor for Windows 11
 **Stack:** Electron + TypeScript + Monaco Editor · Target OS: Windows 11  
-**Version:** 1.1 · Status: Draft
+**Version:** 1.0.1 · Status: Final (2026-03-31)  
 
 ---
 
@@ -159,14 +159,14 @@ interface UserSettings {
 
 ## 5. Delivery Phases
 
-| Phase | Name | Outcome | Est. Time |
+| Phase | Name | Outcome | Status |
 |---|---|---|---|
-| [**Phase 1**](./phase1.md) | Shell, Tabs & Editor | Usable notepad with Monaco, auto-save, session restore, tray | 2 weeks |
-| [**Phase 2**](./phase2.md) | Encryption | Per-tab AES-256-GCM, unlock screen, key derivation | 1 week |
-| [**Phase 3**](./phase3.md) | Cloud Sync | Google OAuth, Drive sync, offline queue, multi-device | 1.5 weeks |
-| [**Phase 4**](./phase4.md) | Polish & Settings | Command palette, settings panel, language modes, build/distribution | 1.5 weeks |
-| [**Phase 5**](./phase5.md) | Power Features (v1.1+) | Tab groups, content search, export/import, diff view | 2 weeks |
-| [**Phase 6**](./phase6.md) | UX Polish & Utilities | Archiving, font customization, text utilities, auto-format | 1 week |
+| [**Phase 1**](./phase1.md) | Shell, Tabs & Editor | Usable notepad with Monaco | ✅ Completed |
+| [**Phase 2**](./phase2.md) | Encryption | Per-tab AES-256-GCM | ✅ Completed |
+| [**Phase 3**](./phase3.md) | Cloud Sync | Google OAuth, Drive sync | ⚡️ Polishing |
+| [**Phase 4**](./phase4.md) | Polish & Settings | Command palette, settings panel | ⚡️ Polishing |
+| [**Phase 5**](./phase5.md) | Power Features | Tab groups, search, diff view | ✅ Completed |
+| [**Phase 6**](./phase6.md) | UX Polish & Utilities | Archiving, font customization, utilities | ✅ Completed |
 
 Each phase document is fully self-contained: it lists its goals, deliverables, file changes, acceptance criteria, and any open questions specific to that phase.
 
