@@ -1,5 +1,5 @@
-import styles from './TabBar.module.css';
-import { Tab } from '../../../../shared/types';
+import styles from "./TabBar.module.css";
+import { Tab } from "../../../../shared/types";
 
 interface ArchivePopupProps {
   tabs: Tab[];
@@ -7,10 +7,17 @@ interface ArchivePopupProps {
   onRestore: (id: string) => void;
 }
 
-export const ArchivePopup = ({ tabs, onClose, onRestore }: ArchivePopupProps) => {
+export const ArchivePopup = ({
+  tabs,
+  onClose,
+  onRestore,
+}: ArchivePopupProps) => {
   return (
     <div className={styles.popupOverlay} onClick={onClose}>
-      <div className={styles.popupContainer} onClick={e => e.stopPropagation()}>
+      <div
+        className={styles.popupContainer}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={styles.popupHeader}>
           <h3>Archived Tabs</h3>
           <button onClick={onClose}>✕</button>
@@ -19,7 +26,7 @@ export const ArchivePopup = ({ tabs, onClose, onRestore }: ArchivePopupProps) =>
           {tabs.length === 0 ? (
             <div className={styles.noItems}>No archived tabs.</div>
           ) : (
-            tabs.map(tab => (
+            tabs.map((tab) => (
               <div key={tab.id} className={styles.popupItem}>
                 <div className={styles.itemInfo}>
                   <span className={styles.itemLabel}>{tab.label}</span>
@@ -27,8 +34,8 @@ export const ArchivePopup = ({ tabs, onClose, onRestore }: ArchivePopupProps) =>
                     Closed {new Date(tab.updatedAt).toLocaleString()}
                   </span>
                 </div>
-                <button 
-                  className={styles.restoreBtn} 
+                <button
+                  className={styles.restoreBtn}
                   onClick={() => onRestore(tab.id)}
                 >
                   Restore

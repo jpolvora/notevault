@@ -1,6 +1,6 @@
-import React from 'react';
-import { useUIStore } from '../../../store/ui';
-import styles from '../Settings.module.css';
+import React from "react";
+import { useUIStore } from "../../../store/ui";
+import styles from "../Settings.module.css";
 
 export const AutoSaveSettings: React.FC = () => {
   const { settings, updateSettings } = useUIStore();
@@ -17,11 +17,16 @@ export const AutoSaveSettings: React.FC = () => {
       <div className={styles.settingRow}>
         <div className={styles.settingInfo}>
           <label>Auto-Save Interval</label>
-          <span className={styles.description}>How long to wait (in ms) after you stop typing before saving (default: 300).</span>
+          <span className={styles.description}>
+            How long to wait (in ms) after you stop typing before saving
+            (default: 300).
+          </span>
         </div>
-        <select 
+        <select
           value={settings.autoSaveInterval}
-          onChange={(e) => updateSettings({ autoSaveInterval: parseInt(e.target.value) })}
+          onChange={(e) =>
+            updateSettings({ autoSaveInterval: parseInt(e.target.value) })
+          }
           className={styles.select}
         >
           <option value="100">Almost Immediate (100ms)</option>
@@ -34,10 +39,12 @@ export const AutoSaveSettings: React.FC = () => {
       <div className={styles.settingRow}>
         <div className={styles.settingInfo}>
           <label>Session Restore</label>
-          <span className={styles.description}>Always restore tabs and cursor position on startup.</span>
+          <span className={styles.description}>
+            Always restore tabs and cursor position on startup.
+          </span>
         </div>
-        <input 
-          type="checkbox" 
+        <input
+          type="checkbox"
           checked={true} // Always on for now
           disabled
           className={styles.checkbox}

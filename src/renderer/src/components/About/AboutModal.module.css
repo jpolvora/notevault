@@ -1,0 +1,132 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal {
+  width: 400px;
+  background-color: var(--color-surface-dropdown);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: modalScale 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  font-size: 48px;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+}
+
+.header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.content {
+  margin-bottom: 30px;
+}
+
+.version {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin-bottom: 15px;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.credits {
+  padding: 15px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  width: 100%;
+}
+
+.credits p {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+.link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.closeBtn {
+  margin-top: auto;
+  padding: 8px 24px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-accent);
+  color: white;
+  font-weight: 500;
+  transition: all 0.2s;
+  width: 100px;
+}
+
+.closeBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.closeBtn:active {
+  transform: translateY(0);
+}

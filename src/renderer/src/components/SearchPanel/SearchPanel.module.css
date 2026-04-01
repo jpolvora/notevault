@@ -14,8 +14,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .container {
@@ -26,7 +30,7 @@
   backdrop-filter: blur(12px);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: 0 16px 32px rgba(0,0,0,0.5);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -41,7 +45,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: var(--radius-sm);
   padding: 8px 12px;
   border: 1px solid var(--color-border);
@@ -118,7 +122,7 @@
 
 .resultText {
   font-size: 13px;
-  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-family: "Cascadia Mono", Consolas, monospace;
   white-space: pre-wrap;
   color: var(--color-text-primary);
   opacity: 0.8;

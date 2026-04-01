@@ -21,8 +21,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
-          cache: 'npm'
-
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install
@@ -40,7 +39,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run package:win -- --publish always
 
-
       - name: Upload Build Artifact
         if: always()
         uses: actions/upload-artifact@v7
@@ -51,5 +49,3 @@ jobs:
 
       - name: Push version changes
         run: git push origin main --tags
-
-

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styles from './CommandPalette.module.css';
-import { useCommandRegistry } from './commandRegistry';
+import React, { useState, useEffect, useRef } from "react";
+import styles from "./CommandPalette.module.css";
+import { useCommandRegistry } from "./commandRegistry";
 
 interface Props {
   isOpen: boolean;
@@ -8,19 +8,20 @@ interface Props {
 }
 
 export const CommandPalette: React.FC<Props> = ({ isOpen, onClose }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const registry = useCommandRegistry();
 
-  const filtered = registry.filter(cmd => 
-    cmd.label.toLowerCase().includes(query.toLowerCase()) ||
-    cmd.id.toLowerCase().includes(query.toLowerCase())
+  const filtered = registry.filter(
+    (cmd) =>
+      cmd.label.toLowerCase().includes(query.toLowerCase()) ||
+      cmd.id.toLowerCase().includes(query.toLowerCase()),
   );
 
   useEffect(() => {
     if (isOpen) {
-      setQuery('');
+      setQuery("");
       setSelectedIndex(0);
       setTimeout(() => inputRef.current?.focus(), 50);
     }
@@ -30,15 +31,15 @@ export const CommandPalette: React.FC<Props> = ({ isOpen, onClose }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
 
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
-      } else if (e.key === 'ArrowDown') {
+      } else if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex(i => Math.min(i + 1, filtered.length - 1));
-      } else if (e.key === 'ArrowUp') {
+        setSelectedIndex((i) => Math.min(i + 1, filtered.length - 1));
+      } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        setSelectedIndex(i => Math.max(i - 1, 0));
-      } else if (e.key === 'Enter') {
+        setSelectedIndex((i) => Math.max(i - 1, 0));
+      } else if (e.key === "Enter") {
         e.preventDefault();
         if (filtered[selectedIndex]) {
           filtered[selectedIndex].action();
@@ -47,15 +48,15 @@ export const CommandPalette: React.FC<Props> = ({ isOpen, onClose }) => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, filtered, selectedIndex, onClose]);
 
   if (!isOpen) return null;
 
   return (
     <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.container} onClick={e => e.stopPropagation()}>
+      <div className={styles.container} onClick={(e) => e.stopPropagation()}>
         <div className={styles.search}>
           <span className={styles.searchIcon}>🔍</span>
           <input
@@ -64,9 +65,9 @@ export const CommandPalette: React.FC<Props> = ({ isOpen, onClose }) => {
             className={styles.input}
             placeholder="Type a command or tab name..."
             value={query}
-            onChange={e => {
-                setQuery(e.target.value);
-                setSelectedIndex(0);
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedIndex(0);
             }}
           />
         </div>
@@ -77,16 +78,18 @@ export const CommandPalette: React.FC<Props> = ({ isOpen, onClose }) => {
             filtered.map((cmd, index) => (
               <div
                 key={cmd.id}
-                className={`${styles.item} ${index === selectedIndex ? styles.selected : ''}`}
+                className={`${styles.item} ${index === selectedIndex ? styles.selected : ""}`}
                 onMouseEnter={() => setSelectedIndex(index)}
                 onClick={() => {
                   cmd.action();
                   onClose();
                 }}
               >
-                <span className={styles.icon}>{cmd.icon || '▶'}</span>
+                <span className={styles.icon}>{cmd.icon || "▶"}</span>
                 <span className={styles.label}>{cmd.label}</span>
-                {cmd.shortcut && <span className={styles.shortcut}>{cmd.shortcut}</span>}
+                {cmd.shortcut && (
+                  <span className={styles.shortcut}>{cmd.shortcut}</span>
+                )}
               </div>
             ))
           )}

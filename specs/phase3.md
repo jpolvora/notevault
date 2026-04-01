@@ -1,4 +1,5 @@
 # Phase 3 — Cloud Sync
+
 **NoteVault · [← Master Spec](./spec.md) · [← Phase 2](./phase2.md)**  
 **Estimate:** 1.5 weeks · **Depends on:** Phase 2 complete · **Delivers:** Google sign-in, Drive sync, offline queue, multi-device tab union.
 
@@ -44,6 +45,7 @@ src/
 ```
 
 **Modified files:**
+
 - `StatusBar.tsx` — sync status chip + account button
 - `CryptoService.ts` — `setKeyFromAccount()` called here after sign-in
 - `StorageService.ts` — `VaultStore.auth` and `syncQueue` now populated
@@ -79,15 +81,16 @@ NoteVault uses the **installed app PKCE flow** — no client secret, safe for de
 ```typescript
 // src/main/services/AuthService.ts
 class AuthService {
-  async signIn(): Promise<AuthState>           // Runs PKCE flow above
-  async signOut(): Promise<void>               // Revokes token, clears VaultStore.auth
-  async refreshIfNeeded(): Promise<string>     // Returns valid access_token
-  getStoredAuth(): AuthState | null
-  isSignedIn(): boolean
+  async signIn(): Promise<AuthState>; // Runs PKCE flow above
+  async signOut(): Promise<void>; // Revokes token, clears VaultStore.auth
+  async refreshIfNeeded(): Promise<string>; // Returns valid access_token
+  getStoredAuth(): AuthState | null;
+  isSignedIn(): boolean;
 }
 ```
 
 **Google API Console setup required:**
+
 - Application type: Desktop app
 - Authorized redirect URIs: `http://127.0.0.1` (loopback, any port allowed)
 - Scope: `https://www.googleapis.com/auth/drive.appdata`
@@ -132,26 +135,26 @@ This keeps metadata (label, timestamp) readable for manifest operations without 
 ```typescript
 class SyncService {
   // Main sync loop — called on interval and on app focus
-  async sync(): Promise<void>
+  async sync(): Promise<void>;
 
   // Push local changes to Drive
-  private async push(tabs: Tab[]): Promise<void>
+  private async push(tabs: Tab[]): Promise<void>;
 
   // Pull remote changes from Drive
-  private async pull(): Promise<Tab[]>
+  private async pull(): Promise<Tab[]>;
 
   // Merge remote tabs into local store
-  private merge(local: Tab[], remote: Tab[]): Tab[]
+  private merge(local: Tab[], remote: Tab[]): Tab[];
 
   // Enqueue an operation for offline retry
-  private enqueue(op: SyncOperation): void
+  private enqueue(op: SyncOperation): void;
 
   // Flush the offline queue (called on network reconnect)
-  async flushQueue(): Promise<void>
+  async flushQueue(): Promise<void>;
 }
 
 interface SyncOperation {
-  type: 'push' | 'delete';
+  type: "push" | "delete";
   tabId: string;
   enqueuedAt: number;
 }
@@ -182,19 +185,19 @@ remote.updatedAt > local.updatedAt  →  pull remote, overwrite local
 equal timestamps                    →  no-op
 ```
 
-*Three-way merge is planned for Phase 5 / v2.0.*
+_Three-way merge is planned for Phase 5 / v2.0._
 
 ---
 
 ## Multi-Device Behavior
 
-| Action | Behavior |
-|---|---|
-| Create tab on device A | Appears on device B at next sync |
-| Edit tab on device A | device B gets the update (last-write-wins) |
+| Action                         | Behavior                                                              |
+| ------------------------------ | --------------------------------------------------------------------- |
+| Create tab on device A         | Appears on device B at next sync                                      |
+| Edit tab on device A           | device B gets the update (last-write-wins)                            |
 | Close (delete) tab on device A | Tab is **soft-deleted** (`deletedAt` set) — still visible on device B |
-| Confirm "delete everywhere" | `deletedAt` written to manifest; all devices remove it at next sync |
-| Soft-deleted tab after 7 days | Permanently removed from manifest and Drive storage |
+| Confirm "delete everywhere"    | `deletedAt` written to manifest; all devices remove it at next sync   |
+| Soft-deleted tab after 7 days  | Permanently removed from manifest and Drive storage                   |
 
 The manifest carries `deletedAt` so devices that were offline can reconcile deletions correctly.
 
@@ -220,26 +223,26 @@ On reconnect (detected via `net.isOnline()` polling every 10s or `app` `online` 
 
 The status bar chip shows real-time sync state:
 
-| State | Display |
-|---|---|
-| Signed out | `Sign in` link |
-| Idle, synced | `☁ Synced · 2m ago` |
-| Syncing | `↻ Syncing…` (animated) |
-| Queued (offline) | `⏸ Offline · 3 queued` |
-| Error | `⚠ Sync error` (click for details) |
+| State            | Display                            |
+| ---------------- | ---------------------------------- |
+| Signed out       | `Sign in` link                     |
+| Idle, synced     | `☁ Synced · 2m ago`                |
+| Syncing          | `↻ Syncing…` (animated)            |
+| Queued (offline) | `⏸ Offline · 3 queued`             |
+| Error            | `⚠ Sync error` (click for details) |
 
 ---
 
 ## Security Notes
 
-| Concern | Handling |
-|---|---|
-| Drive scope | `drive.appdata` only — NoteVault cannot read/write any user file |
-| Tokens at rest | Stored encrypted via AES-256-GCM in `VaultStore.auth` |
+| Concern          | Handling                                                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Drive scope      | `drive.appdata` only — NoteVault cannot read/write any user file                                                               |
+| Tokens at rest   | Stored encrypted via AES-256-GCM in `VaultStore.auth`                                                                          |
 | Content on Drive | Always ciphertext — NoteVault encrypts before upload regardless of per-tab `encrypted` flag during sync (sync always encrypts) |
-| Token refresh | Done silently in main process; renderer never sees raw tokens |
-| Sign-out | Access token revoked via `https://oauth2.googleapis.com/revoke`; local tokens wiped; key switches back to passphrase mode |
-| Account switch | Signing in with a different account triggers key rotation — all content re-encrypted with new account-derived key |
+| Token refresh    | Done silently in main process; renderer never sees raw tokens                                                                  |
+| Sign-out         | Access token revoked via `https://oauth2.googleapis.com/revoke`; local tokens wiped; key switches back to passphrase mode      |
+| Account switch   | Signing in with a different account triggers key rotation — all content re-encrypted with new account-derived key              |
 
 ---
 
@@ -248,11 +251,11 @@ The status bar chip shows real-time sync state:
 ```typescript
 interface VaultStore {
   // ... Phase 1 & 2 fields ...
-  auth?: AuthState;          // Now populated
+  auth?: AuthState; // Now populated
   syncQueue: SyncOperation[]; // Offline queue
   syncMeta: {
-    lastSyncAt: number;      // Unix ms
-    manifestEtag: string;    // Drive ETag for optimistic concurrency
+    lastSyncAt: number; // Unix ms
+    manifestEtag: string; // Drive ETag for optimistic concurrency
   };
 }
 ```

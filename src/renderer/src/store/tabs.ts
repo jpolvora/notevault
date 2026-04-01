@@ -1,17 +1,24 @@
-import { create } from 'zustand';
-import { v4 as uuidv4 } from 'uuid';
-import { Tab, TabGroup, TabColor } from '../../../shared/types';
+import { create } from "zustand";
+import { v4 as uuidv4 } from "uuid";
+import { Tab, TabGroup, TabColor } from "../../../shared/types";
 
 interface TabState {
   tabs: Tab[];
   groups: TabGroup[];
   activeTabId: string | null;
   cursorPosition: { lineNumber: number; column: number } | null;
-  
+
   // Actions
-  setCursorPosition: (pos: { lineNumber: number; column: number } | null) => void;
-  addTab: (content?: string, label?: string, options?: { color?: TabColor; groupId?: string; language?: string }) => string;
+  setCursorPosition: (
+    pos: { lineNumber: number; column: number } | null,
+  ) => void;
+  addTab: (
+    content?: string,
+    label?: string,
+    options?: { color?: TabColor; groupId?: string; language?: string },
+  ) => string;
   removeTab: (id: string | string[]) => void;
+  discardTab: (id: string | string[]) => void;
   restoreTab: (id: string) => void;
   setActiveTab: (id: string, notify?: boolean) => void;
   updateTab: (id: string, updates: Partial<Tab>, notifyIpc?: boolean) => void;
@@ -19,7 +26,7 @@ interface TabState {
   setTabs: (tabs: Tab[]) => void;
   togglePin: (id: string) => void;
   toggleEncryption: (id: string) => Promise<void>;
-  
+
   // Tab Groups
   setGroups: (groups: TabGroup[]) => void;
   addGroup: (label: string, color: TabColor) => string;
@@ -36,7 +43,7 @@ export const useTabStore = create<TabState>((set, get) => ({
 
   setCursorPosition: (pos) => set({ cursorPosition: pos }),
 
-  addTab: (content = '', label = 'New Tab', options = {}) => {
+  addTab: (content = "", label = "New Tab", options = {}) => {
     const id = uuidv4();
     const newTab: Tab = {
       id,
@@ -47,43 +54,63 @@ export const useTabStore = create<TabState>((set, get) => ({
       pinned: false,
       order: get().tabs.length,
       encrypted: false,
-      language: options.language || 'plaintext',
+      language: options.language || "plaintext",
       color: options.color,
       groupId: options.groupId,
-      archived: false
+      archived: false,
     };
-    
+
     set((state) => ({
       tabs: [...state.tabs, newTab],
       activeTabId: id,
     }));
-    
+
     window.api.saveTabs(get().tabs);
     return id;
   },
 
   removeTab: (id) => {
     const targetIds = Array.isArray(id) ? id : [id];
-    
+
     set((state) => {
-      const newTabs = state.tabs.map((t) => 
-        (targetIds.includes(t.id) && !t.pinned) ? { ...t, archived: true } : t
+      const newTabs = state.tabs.map((t) =>
+        targetIds.includes(t.id) && !t.pinned ? { ...t, archived: true } : t,
       );
-      
-      const activeTabs = newTabs.filter(t => !t.archived);
-      const newActiveId = targetIds.includes(state.activeTabId || '')
-        ? (activeTabs[0]?.id || null) 
+
+      const activeTabs = newTabs.filter((t) => !t.archived);
+      const newActiveId = targetIds.includes(state.activeTabId || "")
+        ? activeTabs[0]?.id || null
         : state.activeTabId;
-        
+
       return { tabs: newTabs, activeTabId: newActiveId };
     });
-    
+
+    window.api.saveTabs(get().tabs);
+  },
+
+  discardTab: (id) => {
+    const targetIds = Array.isArray(id) ? id : [id];
+
+    set((state) => {
+      const newTabs = state.tabs.filter(
+        (t) => !targetIds.includes(t.id) || t.pinned,
+      );
+
+      const newActiveId = targetIds.includes(state.activeTabId || "")
+        ? newTabs[0]?.id || null
+        : state.activeTabId;
+
+      return { tabs: newTabs, activeTabId: newActiveId };
+    });
+
     window.api.saveTabs(get().tabs);
   },
 
   restoreTab: (id) => {
     set((state) => {
-      const newTabs = state.tabs.map(t => t.id === id ? { ...t, archived: false } : t);
+      const newTabs = state.tabs.map((t) =>
+        t.id === id ? { ...t, archived: false } : t,
+      );
       return { tabs: newTabs, activeTabId: id };
     });
     window.api.saveTabs(get().tabs);
@@ -95,12 +122,12 @@ export const useTabStore = create<TabState>((set, get) => ({
     set((state) => {
       const index = state.tabs.findIndex((t) => t.id === id);
       if (index === -1) return state;
-      
+
       const newTabs = [...state.tabs];
       newTabs[index] = { ...newTabs[index], ...updates, updatedAt: Date.now() };
       return { tabs: newTabs };
     });
-    
+
     // IPC update
     if (notifyIpc) {
       window.api.updateTab(id, updates);
@@ -111,36 +138,40 @@ export const useTabStore = create<TabState>((set, get) => ({
     set({ tabs: newTabs });
     window.api.saveTabs(newTabs);
   },
-  
+
   setTabs: (tabs) => {
-    const activeTabs = tabs.filter(t => !t.archived);
+    const activeTabs = tabs.filter((t) => !t.archived);
     set({ tabs, activeTabId: get().activeTabId || activeTabs[0]?.id || null });
   },
 
   togglePin: (id) => {
     const tabs = get().tabs;
-    const tab = tabs.find(t => t.id === id);
+    const tab = tabs.find((t) => t.id === id);
     if (!tab) return;
-    
-    const newTabs = tabs.map(t => t.id === id ? { ...t, pinned: !t.pinned } : t);
+
+    const newTabs = tabs.map((t) =>
+      t.id === id ? { ...t, pinned: !t.pinned } : t,
+    );
     set({ tabs: newTabs });
     window.api.saveTabs(newTabs);
   },
 
   toggleEncryption: async (id) => {
-    const tab = get().tabs.find(t => t.id === id);
+    const tab = get().tabs.find((t) => t.id === id);
     if (!tab) return;
-    
+
     const newEncrypted = !tab.encrypted;
     const result = await window.api.setTabEncrypted(id, newEncrypted);
-    
+
     if (result.ok) {
-        set((state) => ({
-            tabs: state.tabs.map(t => t.id === id ? { ...t, encrypted: newEncrypted } : t)
-        }));
+      set((state) => ({
+        tabs: state.tabs.map((t) =>
+          t.id === id ? { ...t, encrypted: newEncrypted } : t,
+        ),
+      }));
     } else {
-        console.error('Failed to toggle encryption:', result.error);
-        alert(`Failed to toggle encryption: ${result.error}`);
+      console.error("Failed to toggle encryption:", result.error);
+      alert(`Failed to toggle encryption: ${result.error}`);
     }
   },
 
@@ -155,22 +186,24 @@ export const useTabStore = create<TabState>((set, get) => ({
   },
 
   removeGroup: (id) => {
-    set((state) => ({ groups: state.groups.filter(g => g.id !== id) }));
+    set((state) => ({ groups: state.groups.filter((g) => g.id !== id) }));
     window.api.saveTabGroups(get().groups);
     // Unset groupId for tabs in this group
-    const tabs = get().tabs.map(t => t.groupId === id ? { ...t, groupId: undefined } : t);
+    const tabs = get().tabs.map((t) =>
+      t.groupId === id ? { ...t, groupId: undefined } : t,
+    );
     set({ tabs });
     window.api.saveTabs(tabs);
   },
 
   updateGroup: (id, updates) => {
     set((state) => ({
-      groups: state.groups.map(g => g.id === id ? { ...g, ...updates } : g)
+      groups: state.groups.map((g) => (g.id === id ? { ...g, ...updates } : g)),
     }));
     window.api.saveTabGroups(get().groups);
   },
 
   setColor: (id, color) => {
     get().updateTab(id, { color });
-  }
+  },
 }));

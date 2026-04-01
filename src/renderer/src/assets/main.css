@@ -1,15 +1,15 @@
-@import '../styles/tokens.css';
+@import "../styles/tokens.css";
 
 body {
   transition: background-color 0.3s ease;
 }
 
-[data-theme='dark'] body {
-  background-color: rgba(0, 0, 0, 0.2); /* Slight tint for dark Mica */
+body[data-theme="dark"] {
+  background-color: rgba(26, 26, 26, 0.4);
 }
 
-[data-theme='light'] body {
-  background-color: rgba(255, 255, 255, 0.4); /* Slight tint for light Mica */
+body[data-theme="light"] {
+  background-color: rgba(243, 243, 243, 0.7);
 }
 
 /* Custom scrollbar for Monaco and other elements */

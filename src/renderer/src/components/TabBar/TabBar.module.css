@@ -92,7 +92,7 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
 }
@@ -185,7 +185,7 @@
 }
 
 .active::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -222,7 +222,9 @@
   justify-content: center;
   border-radius: var(--radius-sm);
   opacity: 0;
-  transition: opacity var(--transition-fast), background-color var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .item:hover .closeBtn {
@@ -261,18 +263,28 @@
   display: flex;
   align-items: center;
   padding: 0 10px;
-  height: 24px;
-  border-radius: 12px;
+  height: 22px;
+  border-radius: 11px;
   background-color: var(--group-color);
-  color: #000; /* High contrast for vibrant colors */
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   margin: 0 6px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   flex-shrink: 0;
+}
+
+[data-theme="light"] .groupHeader {
+  color: #121212;
+  text-shadow: none;
+  background-color: transparent;
+  border: 2px solid var(--group-color);
+  box-shadow: none;
+  padding: 0 8px;
 }
 
 .groupHeader:hover {
@@ -281,11 +293,13 @@
 }
 
 .groupHeader.collapsed {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--group-color);
-  color: var(--group-color);
-  box-shadow: none;
-  padding: 0 8px;
+  opacity: 0.7;
+}
+
+[data-theme="light"] .groupHeader.collapsed {
+  background-color: var(--group-color);
+  color: white;
+  opacity: 0.6;
 }
 
 .groupLabel {

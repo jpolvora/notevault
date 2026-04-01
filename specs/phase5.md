@@ -1,4 +1,5 @@
 # Phase 5 — Power Features (v1.1+)
+
 **NoteVault · [← Master Spec](./spec.md) · [← Phase 4](./phase4.md)**  
 **Estimate:** 2 weeks (v1.1) + ongoing (v2.0) · **Depends on:** Phase 4 shipped · **Delivers:** Tab groups, full content search, export/import, diff view, and the v2.0 future roadmap.
 
@@ -17,14 +18,22 @@ Phase 5 extends a stable, shipped v1.0 into a more capable tool. Each feature in
 Users can assign a color label to any tab and optionally group tabs by color in the tab bar.
 
 **Data model addition:**
+
 ```typescript
 interface Tab {
   // ... existing fields ...
-  color?: TabColor;        // Optional color label
-  groupId?: string;        // Optional group UUID
+  color?: TabColor; // Optional color label
+  groupId?: string; // Optional group UUID
 }
 
-type TabColor = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'gray';
+type TabColor =
+  | "red"
+  | "orange"
+  | "yellow"
+  | "green"
+  | "blue"
+  | "purple"
+  | "gray";
 
 interface TabGroup {
   id: string;
@@ -35,6 +44,7 @@ interface TabGroup {
 ```
 
 **UI:**
+
 - Right-click tab → "Label color" → color swatch picker (7 colors)
 - Colored dot appears on the left side of the tab chip
 - "Group tabs by color" toggle in Settings → Appearance
@@ -52,6 +62,7 @@ Phase 4 adds basic substring search to the command palette. Phase 5 replaces it 
 **Trigger:** `Ctrl+Shift+F` (distinct from `Ctrl+H` which is tab-local Find/Replace)
 
 **Panel layout:**
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │ 🔍 Search all tabs...                    [✕]        │
@@ -74,15 +85,16 @@ Phase 4 adds basic substring search to the command palette. Phase 5 replaces it 
 ```
 
 **Implementation using Monaco API:**
+
 ```typescript
 // For each tab's Monaco model:
 const matches = model.findMatches(
   query,
-  false,           // searchOnlyEditableRange
-  isRegex,         // isRegex
-  matchCase,       // matchCase
-  wordSeparators,  // wordSeparators (null if not whole-word)
-  true             // captureMatches
+  false, // searchOnlyEditableRange
+  isRegex, // isRegex
+  matchCase, // matchCase
+  wordSeparators, // wordSeparators (null if not whole-word)
+  true, // captureMatches
 );
 ```
 
@@ -95,17 +107,20 @@ Results are rendered in the panel. Clicking a result focuses that tab and calls 
 ### 5.3 — Export & Import
 
 **Export tab** (`Ctrl+Shift+X` or right-click → Export):
+
 - Plain text: `.txt`
 - Markdown: `.md`
 - JSON: `.json`
 - All tabs as zip: `.zip` of individual `.txt` files
 
 **Import file as new tab** (drag-and-drop onto tab bar, or File menu):
+
 - Accepts: `.txt`, `.md`, `.json`, `.js`, `.ts`, `.py`, `.sql`, `.yaml`, `.xml`, `.html`, `.css`
 - Tab label defaults to filename (without extension)
 - Language mode auto-detected from file extension
 
 **Drag-and-drop implementation:**
+
 ```typescript
 // TabBar.tsx — drop zone
 <div
@@ -124,11 +139,13 @@ Results are rendered in the panel. Clicking a result focuses that tab and calls 
 Phase 2 delivers the `CryptoService` backup logic. Phase 5 delivers the complete user-facing UI and additional formats.
 
 **Export** (Settings → Encryption → Export backup):
+
 - Full encrypted vault as `.nvault` (all tabs, settings minus auth tokens)
 - Individual encrypted tab as `.nvtab`
 - Both are binary formats defined in Phase 3
 
 **Import**:
+
 - `.nvault`: full vault restore — prompts "Merge with current tabs?" or "Replace all tabs?"
 - `.nvtab`: single tab import, appended to current vault
 - Passphrase prompt if the backup was created with a different passphrase
@@ -142,6 +159,7 @@ Compare the current tab's local content with its last-synced remote version.
 **Trigger:** Right-click tab → "Show changes since last sync"
 
 **Implementation:**
+
 ```typescript
 // Use Monaco's diff editor
 import { DiffEditor } from '@monaco-editor/react';
@@ -161,11 +179,12 @@ import { DiffEditor } from '@monaco-editor/react';
 `tab.lastSyncedContent` is stored (unencrypted in-memory, encrypted on disk) each time a successful sync push completes.
 
 **Data model addition:**
+
 ```typescript
 interface Tab {
   // ... existing fields ...
-  lastSyncedContent?: string;  // In-memory only; cleared on app restart
-  lastSyncedAt?: number;       // Unix ms
+  lastSyncedContent?: string; // In-memory only; cleared on app restart
+  lastSyncedAt?: number; // Unix ms
 }
 ```
 
@@ -195,16 +214,17 @@ Per-tab toggle between plain editor and split editor/preview.
 
 After Google Drive, next providers in priority order:
 
-| Provider | API | Auth |
-|---|---|---|
+| Provider           | API                 | Auth           |
+| ------------------ | ------------------- | -------------- |
 | Microsoft OneDrive | Microsoft Graph API | OAuth 2.0 PKCE |
-| Dropbox | Dropbox API v2 | OAuth 2.0 PKCE |
-| iCloud Drive | CloudKit JS | Apple ID |
+| Dropbox            | Dropbox API v2      | OAuth 2.0 PKCE |
+| iCloud Drive       | CloudKit JS         | Apple ID       |
 
 **Architecture:** `SyncService` is refactored to use a `SyncProvider` interface:
+
 ```typescript
 interface SyncProvider {
-  push(tabId: string, content: Buffer): Promise<string>;  // Returns remote file ID
+  push(tabId: string, content: Buffer): Promise<string>; // Returns remote file ID
   pull(remoteId: string): Promise<Buffer>;
   listManifest(): Promise<ManifestEntry[]>;
   deleteRemote(remoteId: string): Promise<void>;
@@ -244,8 +264,8 @@ A read-only tab type for reusable templates.
 
 ```typescript
 interface SnippetTab extends Tab {
-  type: 'snippet';          // New tab type (default tabs have no 'type' field)
-  triggerKeyword: string;   // e.g. "gpt4", "sql-select"
+  type: "snippet"; // New tab type (default tabs have no 'type' field)
+  triggerKeyword: string; // e.g. "gpt4", "sql-select"
 }
 ```
 
@@ -271,16 +291,16 @@ A Chrome/Edge extension for one-click sending of selected text or the full page 
 
 NoteVault can launch automatically on Windows login. If "Start Minimized" is enabled, it will launch hidden in the system tray.
 
--   **Trigger**: Toggle in Settings → Startup or Tray menu toggle.
--   **Implementation**: Electron `app.setLoginItemSettings` with `--hidden` argument if starting minimized.
+- **Trigger**: Toggle in Settings → Startup or Tray menu toggle.
+- **Implementation**: Electron `app.setLoginItemSettings` with `--hidden` argument if starting minimized.
 
 ### 5.13 — Enhanced System Tray
 
 The system tray icon provides quick access to frequently used tabs and app settings.
 
--   **Pinned Tabs**: Shows any pinned tabs in the context menu for one-click access.
--   **Toggles**: Control "Close to Tray" and "Auto Start" directly from the tray.
--   **Show/Hide**: Primary action (single-click) toggles window visibility.
+- **Pinned Tabs**: Shows any pinned tabs in the context menu for one-click access.
+- **Toggles**: Control "Close to Tray" and "Auto Start" directly from the tray.
+- **Show/Hide**: Primary action (single-click) toggles window visibility.
 
 ---
 
@@ -292,13 +312,15 @@ The system tray icon provides quick access to frequently used tabs and app setti
 - [ ] Encrypted locked tabs show "Encrypted — unlock to search" placeholder
 - [ ] Drag `.txt` file onto tab bar → new tab created with file content and filename as label
 - [ ] Export tab as `.txt` → file saved to Downloads with correct content
-- [ ] Export all tabs as `.zip` → zip contains one file per tab, all with correct content
-- [ ] Right-click tab → "Show changes since last sync" → diff view opens with correct diffs
-- [ ] Diff view is read-only; closing it returns to normal edit mode
-- [ ] `.nvault` export/import round-trip: export vault, clear all tabs, import backup → all tabs restored correctly
+- [x] Export all tabs as `.zip` → zip contains one file per tab, all with correct content
+- [x] Right-click tab → "Show changes since last sync" → diff view opens with correct diffs
+- [x] Diff view is read-only; closing it returns to normal edit mode
+- [x] `.nvault` export/import round-trip: export vault, clear all tabs, import backup → all tabs restored correctly
+- [x] Theme light/dark selection working and correctly affecting Monaco editor
+- [x] Windows app default toolbar implemented with File, Edit, View, Preferences, and Help menus
 - [x] Autostart with Windows: toggling setting adds/removes app from login items
 - [x] Tray menu: Quick access to pinned tabs and toggles for "Close to Tray" / "Auto Start"
 
 ---
 
-*All v2.0 features are subject to revision based on v1.0 user feedback.*
+_All v2.0 features are subject to revision based on v1.0 user feedback._
