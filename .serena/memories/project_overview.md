@@ -3,6 +3,7 @@
 NoteVault is a secure, synced, multi-tab text editor for Windows 11. It's designed for power users who need a fast, keyboard-friendly scratchpad with encryption and cloud sync.
 
 ## Tech Stack
+
 - **Shell:** Electron v30+
 - **Frontend:** React 18
 - **Editor:** Monaco Editor (via `@monaco-editor/react`)
@@ -14,6 +15,7 @@ NoteVault is a secure, synced, multi-tab text editor for Windows 11. It's design
 - **Crypto:** Node.js `crypto` (AES-256-GCM)
 
 ## Key Directories
+
 - `src/main`: Main process code (Electron services, lifecycle)
 - `src/renderer`: Foreground UI code (React components, stores)
 - `src/preload`: IPC bridge between main and renderer

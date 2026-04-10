@@ -1,4 +1,5 @@
 # Phase 2 — Encryption
+
 **NoteVault · [← Master Spec](./spec.md) · [← Phase 1](./phase1.md)**  
 **Estimate:** 1 week · **Depends on:** Phase 1 complete · **Delivers:** AES-256-GCM per-tab encryption with unlock screen, working entirely offline.
 
@@ -41,6 +42,7 @@ src/
 ```
 
 **Modified files:**
+
 - `StorageService.ts` — intercepts writes to encrypt content before storage, decrypt on read
 - `tabs.ts` (IPC) — adds `crypto:setEncrypted` handler
 - `TabItem.tsx` — renders lock icon, adds "Encrypt / Remove Encryption" to context menu
@@ -87,29 +89,29 @@ class CryptoService {
   private key: Buffer | null = null;
 
   // Called once on unlock; derives and caches the key
-  async unlock(passphrase: string): Promise<void>
+  async unlock(passphrase: string): Promise<void>;
 
   // Used by Phase 3 to set a Google-account-derived key without passphrase
-  setKeyFromAccount(userId: string, machineId: string): void
+  setKeyFromAccount(userId: string, machineId: string): void;
 
   // Returns true if unlock() has been called and key is in memory
-  isUnlocked(): boolean
+  isUnlocked(): boolean;
 
   // Encrypt plaintext → base64 ciphertext string
-  encrypt(plaintext: string): string
+  encrypt(plaintext: string): string;
 
   // Decrypt base64 ciphertext → plaintext; throws on auth failure
-  decrypt(ciphertext: string): string
+  decrypt(ciphertext: string): string;
 
   // Re-encrypt all encrypted tabs with a new key (called on passphrase change)
   async rotateKey(
     newPassphrase: string,
     tabs: Tab[],
-    storage: StorageService
-  ): Promise<void>
+    storage: StorageService,
+  ): Promise<void>;
 
   // Wipe the in-memory key (on lock or logout)
-  lock(): void
+  lock(): void;
 }
 ```
 
@@ -170,6 +172,7 @@ Shown as a full-window overlay before `App.tsx` renders tab content. It replaces
 ```
 
 **Logic:**
+
 - If NO encrypted tabs exist → skip unlock screen entirely, show app immediately
 - If encrypted tabs exist AND passphrase mode → show unlock screen
 - If encrypted tabs exist AND Google account mode (Phase 3) → derive key silently, no screen shown
@@ -208,9 +211,9 @@ interface VaultStore {
   settings: UserSettings;
   auth?: AuthState;
   cryptoMeta?: {
-    mode: 'passphrase' | 'account';    // 'account' set by Phase 3
-    salt: string;                       // base64, used in PBKDF2 mode
-    pbkdf2Iterations: number;           // 310000
+    mode: "passphrase" | "account"; // 'account' set by Phase 3
+    salt: string; // base64, used in PBKDF2 mode
+    pbkdf2Iterations: number; // 310000
   };
 }
 ```
@@ -220,11 +223,13 @@ interface VaultStore {
 ## Vault Backup & Import
 
 **Export** (`Ctrl+Shift+B` or Settings → Encryption → Export backup):
+
 - Serialize all tabs (encrypted ones stay as ciphertext, unencrypted ones are encrypted with the current key for the backup)
 - Write to a `.nvault` file (JSON with a `"type": "notevault-backup-v1"` header)
 - Save dialog opens at `~/Documents`
 
 **Import** (unlock screen "Import backup" link or Settings → Encryption → Import backup):
+
 - Open file dialog → select `.nvault`
 - Validate `type` header
 - Ask for the backup's passphrase (may differ from current vault)
@@ -234,14 +239,14 @@ interface VaultStore {
 
 ## Security Notes
 
-| Concern | Handling |
-|---|---|
-| In-memory key lifetime | Key lives only in `CryptoService` instance in main process; never sent to renderer |
-| Renderer never sees ciphertext | `StorageService.loadTab` decrypts before sending over IPC |
-| Passphrase never stored | Only the derived key is kept in memory; wiped on `lock()` |
-| Auth tag verification | AES-GCM auth tag failure throws — never silently returns garbled plaintext |
-| Tabs with `encrypted: false` | Content stored as plaintext — users are warned in Settings |
-| Clipboard | NoteVault does NOT auto-clear clipboard after copy from encrypted tab (v1 scope) |
+| Concern                        | Handling                                                                           |
+| ------------------------------ | ---------------------------------------------------------------------------------- |
+| In-memory key lifetime         | Key lives only in `CryptoService` instance in main process; never sent to renderer |
+| Renderer never sees ciphertext | `StorageService.loadTab` decrypts before sending over IPC                          |
+| Passphrase never stored        | Only the derived key is kept in memory; wiped on `lock()`                          |
+| Auth tag verification          | AES-GCM auth tag failure throws — never silently returns garbled plaintext         |
+| Tabs with `encrypted: false`   | Content stored as plaintext — users are warned in Settings                         |
+| Clipboard                      | NoteVault does NOT auto-clear clipboard after copy from encrypted tab (v1 scope)   |
 
 **User-facing disclaimer** shown once when first encrypting a tab:
 

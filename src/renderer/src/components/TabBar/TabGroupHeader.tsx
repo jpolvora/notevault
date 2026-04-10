@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
-import styles from './TabBar.module.css';
-import { TabGroup } from '../../../../shared/types';
-import { useTabStore } from '../../store/tabs';
-import { ContextMenu } from '../ContextMenu/ContextMenu';
+import { useState, useRef, useEffect } from "react";
+import styles from "./TabBar.module.css";
+import { TabGroup } from "../../../../shared/types";
+import { useTabStore } from "../../store/tabs";
+import { ContextMenu } from "../ContextMenu/ContextMenu";
 
 interface TabGroupHeaderProps {
   group: TabGroup;
@@ -12,7 +12,10 @@ export const TabGroupHeader = ({ group }: TabGroupHeaderProps) => {
   const { removeGroup, updateGroup } = useTabStore();
   const [isRenaming, setIsRenaming] = useState(false);
   const [tempLabel, setTempLabel] = useState(group.label);
-  const [contextMenu, setContextMenu] = useState<{ x: number, y: number } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -37,32 +40,68 @@ export const TabGroupHeader = ({ group }: TabGroupHeaderProps) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleBlur();
-    if (e.key === 'Escape') {
+    if (e.key === "Enter") handleBlur();
+    if (e.key === "Escape") {
       setTempLabel(group.label);
       setIsRenaming(false);
     }
   };
 
   const menuOptions = [
-    { label: 'Rename Group', onClick: () => setIsRenaming(true) },
-    { label: 'Ungroup Tabs', onClick: () => removeGroup(group.id), divider: true },
-    { label: 'Red', color: 'red', onClick: () => updateGroup(group.id, { color: 'red' }) },
-    { label: 'Orange', color: 'orange', onClick: () => updateGroup(group.id, { color: 'orange' }) },
-    { label: 'Yellow', color: 'yellow', onClick: () => updateGroup(group.id, { color: 'yellow' }) },
-    { label: 'Green', color: 'green', onClick: () => updateGroup(group.id, { color: 'green' }) },
-    { label: 'Blue', color: 'blue', onClick: () => updateGroup(group.id, { color: 'blue' }) },
-    { label: 'Purple', color: 'purple', onClick: () => updateGroup(group.id, { color: 'purple' }) },
-    { label: 'Gray', color: 'gray', onClick: () => updateGroup(group.id, { color: 'gray' }) },
+    { label: "Rename Group", onClick: () => setIsRenaming(true) },
+    {
+      label: "Ungroup Tabs",
+      onClick: () => removeGroup(group.id),
+      divider: true,
+    },
+    {
+      label: "Red",
+      color: "red",
+      onClick: () => updateGroup(group.id, { color: "red" }),
+    },
+    {
+      label: "Orange",
+      color: "orange",
+      onClick: () => updateGroup(group.id, { color: "orange" }),
+    },
+    {
+      label: "Yellow",
+      color: "yellow",
+      onClick: () => updateGroup(group.id, { color: "yellow" }),
+    },
+    {
+      label: "Green",
+      color: "green",
+      onClick: () => updateGroup(group.id, { color: "green" }),
+    },
+    {
+      label: "Blue",
+      color: "blue",
+      onClick: () => updateGroup(group.id, { color: "blue" }),
+    },
+    {
+      label: "Purple",
+      color: "purple",
+      onClick: () => updateGroup(group.id, { color: "purple" }),
+    },
+    {
+      label: "Gray",
+      color: "gray",
+      onClick: () => updateGroup(group.id, { color: "gray" }),
+    },
   ];
 
   return (
     <>
       <div
-        className={`${styles.groupHeader} ${group.collapsed ? styles.collapsed : ''}`}
+        className={`${styles.groupHeader} ${group.collapsed ? styles.collapsed : ""}`}
         onClick={() => updateGroup(group.id, { collapsed: !group.collapsed })}
         onContextMenu={handleContextMenu}
-        style={{ '--group-color': `var(--color-label-${group.color})` } as React.CSSProperties}
+        style={
+          {
+            "--group-color": `var(--color-label-${group.color})`,
+          } as React.CSSProperties
+        }
       >
         {isRenaming ? (
           <input
@@ -75,7 +114,7 @@ export const TabGroupHeader = ({ group }: TabGroupHeaderProps) => {
             onClick={(e) => e.stopPropagation()}
           />
         ) : (
-          <span className={styles.groupLabel}>{group.label || 'Group'}</span>
+          <span className={styles.groupLabel}>{group.label || "Group"}</span>
         )}
       </div>
 

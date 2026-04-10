@@ -5,7 +5,9 @@ I have successfully configured the GitHub Actions workflow to automate the build
 ### Changes Made
 
 #### 1. Updated `electron-builder.yml`
+
 Changed the publish provider from `generic` to `github` and set the repository information.
+
 ```yaml
 publish:
   provider: github
@@ -14,8 +16,10 @@ publish:
 ```
 
 #### 2. Created `.github/workflows/release.yml`
+
 A new workflow that triggers on a Pull Request from `develop` to `main`.
 It performs the following:
+
 - Increments the version (npm version patch).
 - Builds the Windows distributable (`npm run build:win`).
 - Creates a GitHub Release and uploads the installer.

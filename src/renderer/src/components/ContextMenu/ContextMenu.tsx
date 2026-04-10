@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import styles from './ContextMenu.module.css';
+import { useEffect, useRef } from "react";
+import styles from "./ContextMenu.module.css";
 
 interface ContextMenuOption {
   label: string;
@@ -27,20 +27,23 @@ export const ContextMenu = ({ x, y, onClose, options }: ContextMenuProps) => {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
 
   // Ensure menu stays within window bounds
   const adjustedX = Math.min(x, window.innerWidth - 160);
-  const adjustedY = Math.min(y, window.innerHeight - (options.length * 32 + 20));
+  const adjustedY = Math.min(
+    y,
+    window.innerHeight - (options.length * 32 + 20),
+  );
 
   return (
     <div
@@ -59,9 +62,11 @@ export const ContextMenu = ({ x, y, onClose, options }: ContextMenuProps) => {
             }}
           >
             {option.color && (
-              <span 
-                className={styles.colorDot} 
-                style={{ backgroundColor: `var(--color-label-${option.color})` }} 
+              <span
+                className={styles.colorDot}
+                style={{
+                  backgroundColor: `var(--color-label-${option.color})`,
+                }}
               />
             )}
             <span className={styles.label}>{option.label}</span>

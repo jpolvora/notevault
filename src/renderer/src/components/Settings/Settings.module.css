@@ -14,8 +14,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .container {
@@ -32,8 +36,14 @@
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .sidebar {
@@ -107,7 +117,9 @@
   line-height: 1;
 }
 
-.closeButton:hover { opacity: 1; }
+.closeButton:hover {
+  opacity: 1;
+}
 
 .section {
   display: flex;
@@ -146,7 +158,9 @@
   opacity: 0.5;
 }
 
-.input, .select, .numberInput {
+.input,
+.select,
+.numberInput {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
   border-radius: 4px;
@@ -158,7 +172,9 @@
   transition: border-color 0.2s;
 }
 
-.input:focus, .select:focus, .numberInput:focus {
+.input:focus,
+.select:focus,
+.numberInput:focus {
   border-color: var(--color-accent, #0078d4);
 }
 
@@ -169,8 +185,14 @@
   width: 200px;
 }
 
-.sliderContainer input { flex: 1; }
-.sliderContainer span { width: 35px; font-size: 13px; opacity: 0.7; }
+.sliderContainer input {
+  flex: 1;
+}
+.sliderContainer span {
+  width: 35px;
+  font-size: 13px;
+  opacity: 0.7;
+}
 
 .segmentedControl {
   display: flex;
@@ -194,4 +216,87 @@
 .segmentedControl button.active {
   background: var(--color-accent, #0078d4);
   opacity: 1;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-color, rgba(255, 255, 255, 0.1));
+  margin: 16px 0;
+}
+
+.button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.primaryButton {
+  background: var(--color-accent, #0078d4);
+  border: 1px solid transparent;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.primaryButton:hover {
+  filter: brightness(1.1);
+}
+
+.primaryButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.backupList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.backupItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
+  border-radius: 6px;
+}
+
+.backupInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.backupName {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.backupDate {
+  font-size: 12px;
+  opacity: 0.4;
 }

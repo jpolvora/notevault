@@ -1,6 +1,6 @@
-import React from 'react';
-import { useUIStore } from '../../../store/ui';
-import styles from '../Settings.module.css';
+import React from "react";
+import { useUIStore } from "../../../store/ui";
+import styles from "../Settings.module.css";
 
 export const ShortcutsSettings: React.FC = () => {
   const { settings, updateSettings } = useUIStore();
@@ -17,10 +17,13 @@ export const ShortcutsSettings: React.FC = () => {
       <div className={styles.settingRow}>
         <div className={styles.settingInfo}>
           <label>Global Show/Hide</label>
-          <span className={styles.description}>Hotkey to toggle NoteVault window from anywhere (default: Ctrl+Shift+N).</span>
+          <span className={styles.description}>
+            Hotkey to toggle NoteVault window from anywhere (default:
+            Ctrl+Shift+N).
+          </span>
         </div>
-        <input 
-          type="text" 
+        <input
+          type="text"
           value={settings.globalShortcut}
           onChange={(e) => updateSettings({ globalShortcut: e.target.value })}
           className={styles.input}

@@ -1,4 +1,5 @@
 # Phase 4 — Polish & Settings
+
 **NoteVault · [← Master Spec](./spec.md) · [← Phase 3](./phase3.md)**  
 **Estimate:** 1.5 weeks · **Depends on:** Phase 3 complete · **Delivers:** Production-ready app. Command palette, full settings panel, language modes, Windows 11 polish, installer, auto-update.
 
@@ -134,7 +135,7 @@ Clicking the language name in the status bar opens a small popover listing suppo
 // Renderer
 monaco.editor.setModelLanguage(editor.getModel()!, newLang);
 tabStore.update(tab.id, { language: newLang });
-ipc.invoke('tab:update', { id: tab.id, language: newLang });
+ipc.invoke("tab:update", { id: tab.id, language: newLang });
 ```
 
 ### Supported Languages (v1)
@@ -150,17 +151,44 @@ Language workers are loaded on demand to avoid bundling all ~4MB of language ser
 self.MonacoEnvironment = {
   getWorker(_, label) {
     switch (label) {
-      case 'json':       return new Worker(new URL('monaco-editor/esm/vs/language/json/json.worker', import.meta.url));
-      case 'typescript':
-      case 'javascript': return new Worker(new URL('monaco-editor/esm/vs/language/typescript/ts.worker', import.meta.url));
-      case 'css':
-      case 'scss':
-      case 'less':       return new Worker(new URL('monaco-editor/esm/vs/language/css/css.worker', import.meta.url));
-      case 'html':
-      case 'xml':        return new Worker(new URL('monaco-editor/esm/vs/language/html/html.worker', import.meta.url));
-      default:           return new Worker(new URL('monaco-editor/esm/vs/editor/editor.worker', import.meta.url));
+      case "json":
+        return new Worker(
+          new URL(
+            "monaco-editor/esm/vs/language/json/json.worker",
+            import.meta.url,
+          ),
+        );
+      case "typescript":
+      case "javascript":
+        return new Worker(
+          new URL(
+            "monaco-editor/esm/vs/language/typescript/ts.worker",
+            import.meta.url,
+          ),
+        );
+      case "css":
+      case "scss":
+      case "less":
+        return new Worker(
+          new URL(
+            "monaco-editor/esm/vs/language/css/css.worker",
+            import.meta.url,
+          ),
+        );
+      case "html":
+      case "xml":
+        return new Worker(
+          new URL(
+            "monaco-editor/esm/vs/language/html/html.worker",
+            import.meta.url,
+          ),
+        );
+      default:
+        return new Worker(
+          new URL("monaco-editor/esm/vs/editor/editor.worker", import.meta.url),
+        );
     }
-  }
+  },
 };
 ```
 
@@ -219,11 +247,11 @@ Settings changes take effect immediately — no Apply/OK button. Changes are deb
 // React: on any setting change
 const handleChange = useDebouncedCallback((key, value) => {
   settingsStore.set(key, value);
-  ipc.invoke('settings:update', { [key]: value });
+  ipc.invoke("settings:update", { [key]: value });
 
   // For Monaco-specific settings: apply immediately to all editor instances
   if (MONACO_OPTIONS.includes(key)) {
-    editorRefs.forEach(ref => ref.current?.updateOptions({ [key]: value }));
+    editorRefs.forEach((ref) => ref.current?.updateOptions({ [key]: value }));
   }
 }, 500);
 ```
@@ -236,9 +264,9 @@ const handleChange = useDebouncedCallback((key, value) => {
 
 ```typescript
 // Already set in Phase 1. Phase 4 adds: respect system light/dark changes
-nativeTheme.on('updated', () => {
+nativeTheme.on("updated", () => {
   const isDark = nativeTheme.shouldUseDarkColors;
-  win.webContents.send('theme:changed', isDark ? 'dark' : 'light');
+  win.webContents.send("theme:changed", isDark ? "dark" : "light");
 });
 ```
 
@@ -250,10 +278,10 @@ Windows 11 exposes the accent color via the registry. Read it on startup and inj
 
 ```typescript
 // main/index.ts
-import { systemPreferences } from 'electron';
+import { systemPreferences } from "electron";
 const accent = systemPreferences.getAccentColor(); // e.g. "0078d4ff"
 win.webContents.executeJavaScript(
-  `document.documentElement.style.setProperty('--color-accent', '#${accent.slice(0, 6)}')`
+  `document.documentElement.style.setProperty('--color-accent', '#${accent.slice(0, 6)}')`,
 );
 ```
 
@@ -263,16 +291,41 @@ CSS transitions for tab bar interactions (keep under 150ms to feel native, not s
 
 ```css
 /* Tab appear */
-.tab { animation: tabIn 120ms ease-out; }
-@keyframes tabIn { from { opacity: 0; transform: scaleX(0.85); } to { opacity: 1; transform: scaleX(1); } }
+.tab {
+  animation: tabIn 120ms ease-out;
+}
+@keyframes tabIn {
+  from {
+    opacity: 0;
+    transform: scaleX(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
 
 /* Settings panel open */
-.settingsOverlay { animation: slideIn 180ms cubic-bezier(0.16, 1, 0.3, 1); }
-@keyframes slideIn { from { opacity: 0; transform: translateY(8px); } }
+.settingsOverlay {
+  animation: slideIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
 
 /* Command palette */
-.palette { animation: fadeScale 120ms ease-out; }
-@keyframes fadeScale { from { opacity: 0; transform: scale(0.97); } }
+.palette {
+  animation: fadeScale 120ms ease-out;
+}
+@keyframes fadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
 ```
 
 ---
@@ -282,6 +335,7 @@ CSS transitions for tab bar interactions (keep under 150ms to feel native, not s
 ### NSIS Installer (electron-builder)
 
 The build process is split into two stages:
+
 1. **Build Unpacked (`npm run build:win`)**: Compiles the source and creates the unpacked folder structure in `dist/win-unpacked`. This is the primary command for debugging the final asset structure.
 2. **Package Installer (`npm run package:win`)**: Generates the final `.exe` installer for distribution.
 
@@ -308,17 +362,17 @@ nsis:
 
 ```typescript
 // src/main/services/UpdateService.ts
-import { autoUpdater } from 'electron-updater';
+import { autoUpdater } from "electron-updater";
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
 
-autoUpdater.on('update-available', () => {
-  win.webContents.send('update:available');
+autoUpdater.on("update-available", () => {
+  win.webContents.send("update:available");
 });
 
-autoUpdater.on('update-downloaded', () => {
-  win.webContents.send('update:ready');   // Renderer shows "Restart to update" toast
+autoUpdater.on("update-downloaded", () => {
+  win.webContents.send("update:ready"); // Renderer shows "Restart to update" toast
 });
 
 export function checkForUpdates() {
@@ -332,11 +386,11 @@ Check on launch and every 4 hours thereafter.
 
 With `vite-plugin-monaco-editor` and lazy workers:
 
-| Config | Approximate size |
-|---|---|
-| Full Monaco (all languages) | ~5.2MB |
-| Phase 4 (12 languages, lazy) | ~2.1MB |
-| editor.worker only (plaintext) | ~0.9MB |
+| Config                         | Approximate size |
+| ------------------------------ | ---------------- |
+| Full Monaco (all languages)    | ~5.2MB           |
+| Phase 4 (12 languages, lazy)   | ~2.1MB           |
+| editor.worker only (plaintext) | ~0.9MB           |
 
 Target: < 2.5MB total Monaco contribution to installer.
 
@@ -352,14 +406,14 @@ Code signing is **strongly recommended** but not gating v1.0 release. Without it
 
 ## Keyboard Shortcuts (Phase 4 additions)
 
-| Shortcut | Action | Handler |
-|---|---|---|
-| `Ctrl+P` | Command palette | App (overrides Monaco "Go to file") |
-| `Ctrl+,` | Settings | App |
-| `Ctrl+Shift+P` | Pin / Unpin current tab | App |
-| `Ctrl+Shift+E` | Toggle encryption on current tab | App |
-| `Ctrl+Shift+S` | Force sync now | App |
-| Click language in status bar | Open language picker | App |
+| Shortcut                     | Action                           | Handler                             |
+| ---------------------------- | -------------------------------- | ----------------------------------- |
+| `Ctrl+P`                     | Command palette                  | App (overrides Monaco "Go to file") |
+| `Ctrl+,`                     | Settings                         | App                                 |
+| `Ctrl+Shift+P`               | Pin / Unpin current tab          | App                                 |
+| `Ctrl+Shift+E`               | Toggle encryption on current tab | App                                 |
+| `Ctrl+Shift+S`               | Force sync now                   | App                                 |
+| Click language in status bar | Open language picker             | App                                 |
 
 ---
 

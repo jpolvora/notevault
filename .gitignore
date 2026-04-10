@@ -4,3 +4,61 @@ dist/
 node_modules/
 .vscode/
 
+# Environment files
+.env
+.env.local
+.env.*
+.specstory/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+
+# Testing
+coverage/
+.nyc_output
+
+# IDE - VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+
+# Temporary files
+*.swp
+*.swo
+*.tmp
+*~
+.DS_Store
+
+# Tool Caches
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+.vite/
+.secretlint/
+
+# Electron-builder & Workspace
+dist_electron/
+release/
+*.exe
+*.dmg
+*.AppImage
+*.zip
+*.7z
+test_secret.txt
+
+# Serena Artifacts
+.serena/

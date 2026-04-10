@@ -1,20 +1,23 @@
 :root {
-  --color-bg: transparent;              /* Mica shows through */
-  --color-surface: rgba(255,255,255,0.06);
-  --color-surface-hover: rgba(255,255,255,0.10);
-  --color-surface-active: rgba(255,255,255,0.15);
-  --color-border: rgba(255,255,255,0.10);
-  --color-text-primary: #E8E8E8;
-  --color-text-muted: #888888;
-  --color-accent: #0078D4;
+  --color-bg: transparent; /* Mica shows through */
+  --color-surface: rgba(255, 255, 255, 0.08);
+  --color-surface-hover: rgba(255, 255, 255, 0.12);
+  --color-surface-active: rgba(255, 255, 255, 0.18);
+  --color-surface-dropdown: rgba(32, 32, 32, 0.98);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-text-primary: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.55);
+  --color-accent: #0078d4;
+  --color-primary: var(--color-accent);
   --tab-height: 38px;
   --statusbar-height: 24px;
   --titlebar-height: 32px;
   --radius-sm: 4px;
   --radius-md: 8px;
-  --font-ui: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-ui:
+    "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
   --transition-fast: 0.1s ease;
-  
+
   /* Tab Colors */
   --color-label-red: #ff453a;
   --color-label-orange: #ff9f0a;
@@ -25,23 +28,25 @@
   --color-label-gray: #8e8e93;
 }
 
-[data-theme='light'] {
-  --color-surface: rgba(0,0,0,0.05);
-  --color-surface-hover: rgba(0,0,0,0.08);
-  --color-surface-active: rgba(0,0,0,0.12);
-  --color-border: rgba(0,0,0,0.08);
-  --color-text-primary: #1A1A1A;
-  --color-text-muted: #555555;
-  --color-accent: #0078D4;
-  
-  /* Tab Colors (Light) */
-  --color-label-red: #ff3b30;
-  --color-label-orange: #ff9500;
-  --color-label-yellow: #ffcc00;
-  --color-label-green: #28cd41;
-  --color-label-blue: #007aff;
-  --color-label-purple: #af52de;
-  --color-label-gray: #8e8e93;
+[data-theme="light"] {
+  --color-surface: rgba(255, 255, 255, 0.75);
+  --color-surface-hover: rgba(255, 255, 255, 0.9);
+  --color-surface-active: #ffffff;
+  --color-surface-dropdown: rgba(255, 255, 255, 0.98);
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-text-primary: #121212;
+  --color-text-muted: rgba(0, 0, 0, 0.55);
+  --color-accent: #0060ac;
+  --color-primary: var(--color-accent);
+
+  /* Tab Colors (Light - Premium Tints) */
+  --color-label-red: #ea4335;
+  --color-label-orange: #fbbc04;
+  --color-label-yellow: #fdd663;
+  --color-label-green: #34a853;
+  --color-label-blue: #4285f4;
+  --color-label-purple: #a142f4;
+  --color-label-gray: #70757a;
 }
 
 * {

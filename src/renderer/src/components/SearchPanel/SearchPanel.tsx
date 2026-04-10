@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
-import styles from './SearchPanel.module.css';
-import { useTabStore } from '../../store/tabs';
+import { useState, useMemo } from "react";
+import styles from "./SearchPanel.module.css";
+import { useTabStore } from "../../store/tabs";
 
 interface SearchResult {
   tabId: string;
@@ -18,7 +18,7 @@ interface SearchPanelProps {
 
 export const SearchPanel = ({ isOpen, onClose }: SearchPanelProps) => {
   const { tabs, setActiveTab } = useTabStore();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [matchCase, setMatchCase] = useState(false);
   const [useRegex, setUseRegex] = useState(false);
 
@@ -26,34 +26,36 @@ export const SearchPanel = ({ isOpen, onClose }: SearchPanelProps) => {
     if (!query || query.length < 2) return [];
 
     const allResults: SearchResult[] = [];
-    
+
     // Simple implementation: search through tab.content
-    // For encrypted tabs that are locked, content will be redacted (''), 
+    // For encrypted tabs that are locked, content will be redacted (''),
     // so they won't show results unless unlocked.
-    
-    tabs.forEach(tab => {
+
+    tabs.forEach((tab) => {
       if (!tab.content) return;
-      
-      const lines = tab.content.split('\n');
+
+      const lines = tab.content.split("\n");
       lines.forEach((line, index) => {
         const q = matchCase ? query : query.toLowerCase();
         const l = matchCase ? line : line.toLowerCase();
-        
+
         if (useRegex) {
-            try {
-                const regex = new RegExp(query, matchCase ? 'g' : 'gi');
-                let m;
-                while ((m = regex.exec(line)) !== null) {
-                    allResults.push({
-                        tabId: tab.id,
-                        tabLabel: tab.label,
-                        lineNumber: index + 1,
-                        text: line,
-                        matchIndex: m.index,
-                        matchLength: m[0].length
-                    });
-                }
-            } catch (e) { /* Invalid regex */ }
+          try {
+            const regex = new RegExp(query, matchCase ? "g" : "gi");
+            let m;
+            while ((m = regex.exec(line)) !== null) {
+              allResults.push({
+                tabId: tab.id,
+                tabLabel: tab.label,
+                lineNumber: index + 1,
+                text: line,
+                matchIndex: m.index,
+                matchLength: m[0].length,
+              });
+            }
+          } catch (e) {
+            /* Invalid regex */
+          }
         } else if (l.includes(q)) {
           // Find all occurrences in the line
           let pos = l.indexOf(q);
@@ -64,7 +66,7 @@ export const SearchPanel = ({ isOpen, onClose }: SearchPanelProps) => {
               lineNumber: index + 1,
               text: line,
               matchIndex: pos,
-              matchLength: query.length
+              matchLength: query.length,
             });
             pos = l.indexOf(q, pos + 1);
           }
@@ -79,7 +81,7 @@ export const SearchPanel = ({ isOpen, onClose }: SearchPanelProps) => {
 
   return (
     <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.container} onClick={e => e.stopPropagation()}>
+      <div className={styles.container} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <div className={styles.searchBox}>
             <input
@@ -87,18 +89,28 @@ export const SearchPanel = ({ isOpen, onClose }: SearchPanelProps) => {
               className={styles.input}
               placeholder="Search all tabs..."
               value={query}
-              onChange={e => setQuery(e.target.value)}
-              onKeyDown={e => e.key === 'Escape' && onClose()}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Escape" && onClose()}
             />
-            <button className={styles.closeBtn} onClick={onClose}>✕</button>
+            <button className={styles.closeBtn} onClick={onClose}>
+              ✕
+            </button>
           </div>
           <div className={styles.options}>
             <label className={styles.option}>
-              <input type="checkbox" checked={matchCase} onChange={e => setMatchCase(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={matchCase}
+                onChange={(e) => setMatchCase(e.target.checked)}
+              />
               Match Case
             </label>
             <label className={styles.option}>
-              <input type="checkbox" checked={useRegex} onChange={e => setUseRegex(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={useRegex}
+                onChange={(e) => setUseRegex(e.target.checked)}
+              />
               Regex
             </label>
           </div>
@@ -107,12 +119,12 @@ export const SearchPanel = ({ isOpen, onClose }: SearchPanelProps) => {
         <div className={styles.resultsList}>
           {results.length > 0 ? (
             results.map((result, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className={styles.resultItem}
                 onClick={() => {
                   setActiveTab(result.tabId);
-                  // We would also want to reveal the line, but we need 
+                  // We would also want to reveal the line, but we need
                   // to communicate this to the Editor component.
                   // For now, focusing the tab is a good start.
                   onClose();
@@ -120,14 +132,21 @@ export const SearchPanel = ({ isOpen, onClose }: SearchPanelProps) => {
               >
                 <div className={styles.resultHeader}>
                   <span className={styles.tabLabel}>{result.tabLabel}</span>
-                  <span className={styles.lineNumber}>Ln {result.lineNumber}</span>
+                  <span className={styles.lineNumber}>
+                    Ln {result.lineNumber}
+                  </span>
                 </div>
                 <div className={styles.resultText}>
                   {result.text.substring(0, result.matchIndex)}
                   <mark className={styles.highlight}>
-                    {result.text.substring(result.matchIndex, result.matchIndex + result.matchLength)}
+                    {result.text.substring(
+                      result.matchIndex,
+                      result.matchIndex + result.matchLength,
+                    )}
                   </mark>
-                  {result.text.substring(result.matchIndex + result.matchLength)}
+                  {result.text.substring(
+                    result.matchIndex + result.matchLength,
+                  )}
                 </div>
               </div>
             ))

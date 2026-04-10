@@ -1,4 +1,5 @@
 # Phase 1 — Shell, Tabs & Editor
+
 **NoteVault · [← Master Spec](./spec.md)**  
 **Estimate:** 2 weeks · **Delivers:** A fully usable notepad. No encryption, no sync — just tabs that never disappear.
 
@@ -37,15 +38,15 @@ npm install -D vite-plugin-monaco-editor @types/uuid
 **`vite.config.ts`** — configure Monaco worker bundling:
 
 ```typescript
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import monacoEditorPlugin from 'vite-plugin-monaco-editor';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import monacoEditorPlugin from "vite-plugin-monaco-editor";
 
 export default defineConfig({
   plugins: [
     react(),
     monacoEditorPlugin({
-      languageWorkers: ['editorWorkerService'],
+      languageWorkers: ["editorWorkerService"],
       // Language workers added lazily in Phase 4
     }),
   ],
@@ -108,19 +109,19 @@ const win = new BrowserWindow({
   height: 680,
   minWidth: 480,
   minHeight: 320,
-  frame: false,           // Custom title bar
+  frame: false, // Custom title bar
   transparent: false,
-  backgroundColor: '#00000000',
+  backgroundColor: "#00000000",
   webPreferences: {
-    preload: path.join(__dirname, 'preload.js'),
+    preload: path.join(__dirname, "preload.js"),
     contextIsolation: true,
     nodeIntegration: false,
   },
 });
 
 // Windows 11 Mica material
-if (process.platform === 'win32') {
-  win.setBackgroundMaterial('mica');
+if (process.platform === "win32") {
+  win.setBackgroundMaterial("mica");
 }
 ```
 
@@ -131,28 +132,32 @@ if (process.platform === 'win32') {
 ```typescript
 // src/renderer/components/Editor/MonacoInstance.tsx
 const DEFAULT_OPTIONS: editor.IStandaloneEditorConstructionOptions = {
-  language: 'plaintext',
-  fontFamily: 'Cascadia Mono, Consolas, monospace',
+  language: "plaintext",
+  fontFamily: "Cascadia Mono, Consolas, monospace",
   fontSize: 14,
   lineHeight: 22,
   fontLigatures: true,
-  wordWrap: 'off',
-  lineNumbers: 'off',
+  wordWrap: "off",
+  lineNumbers: "off",
   minimap: { enabled: false },
   scrollBeyondLastLine: false,
-  renderWhitespace: 'none',
+  renderWhitespace: "none",
   smoothScrolling: true,
-  cursorBlinking: 'smooth',
-  cursorSmoothCaretAnimation: 'on',
+  cursorBlinking: "smooth",
+  cursorSmoothCaretAnimation: "on",
   padding: { top: 16, bottom: 16 },
   overviewRulerLanes: 0,
-  renderLineHighlight: 'none',
-  scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8, useShadows: false },
+  renderLineHighlight: "none",
+  scrollbar: {
+    verticalScrollbarSize: 8,
+    horizontalScrollbarSize: 8,
+    useShadows: false,
+  },
   contextmenu: true,
   quickSuggestions: false,
   suggestOnTriggerCharacters: false,
-  acceptSuggestionOnEnter: 'off',
-  tabCompletion: 'off',
+  acceptSuggestionOnEnter: "off",
+  tabCompletion: "off",
   parameterHints: { enabled: false },
   folding: false,
   links: true,
@@ -164,30 +169,30 @@ const DEFAULT_OPTIONS: editor.IStandaloneEditorConstructionOptions = {
 
 ```typescript
 // src/renderer/components/Editor/monacoThemes.ts
-monaco.editor.defineTheme('notevault-dark', {
-  base: 'vs-dark',
+monaco.editor.defineTheme("notevault-dark", {
+  base: "vs-dark",
   inherit: true,
   rules: [],
   colors: {
-    'editor.background': '#00000000',       // Transparent — Mica shows through
-    'editor.foreground': '#E8E8E8',
-    'editor.selectionBackground': '#0078D440',
-    'editor.lineHighlightBackground': '#FFFFFF08',
-    'editorCursor.foreground': '#0078D4',   // Windows accent color
-    'editorLineNumber.foreground': '#555555',
+    "editor.background": "#00000000", // Transparent — Mica shows through
+    "editor.foreground": "#E8E8E8",
+    "editor.selectionBackground": "#0078D440",
+    "editor.lineHighlightBackground": "#FFFFFF08",
+    "editorCursor.foreground": "#0078D4", // Windows accent color
+    "editorLineNumber.foreground": "#555555",
   },
 });
 
-monaco.editor.defineTheme('notevault-light', {
-  base: 'vs',
+monaco.editor.defineTheme("notevault-light", {
+  base: "vs",
   inherit: true,
   rules: [],
   colors: {
-    'editor.background': '#00000000',
-    'editor.foreground': '#1A1A1A',
-    'editor.selectionBackground': '#0078D430',
-    'editor.lineHighlightBackground': '#00000008',
-    'editorCursor.foreground': '#0078D4',
+    "editor.background": "#00000000",
+    "editor.foreground": "#1A1A1A",
+    "editor.selectionBackground": "#0078D430",
+    "editor.lineHighlightBackground": "#00000008",
+    "editorCursor.foreground": "#0078D4",
   },
 });
 ```
@@ -259,14 +264,14 @@ App launches
 
 Right-click on any tab opens a menu:
 
-| Item | Notes |
-|---|---|
-| Rename | Inline edit on the tab label |
-| Pin / Unpin | Toggle `pinned` flag |
-| Duplicate | Creates a new tab with the same content |
-| Move to first | Sets `order: 0`, shifts others |
-| Close | Disabled if pinned |
-| Close all others | Skips pinned tabs |
+| Item             | Notes                                   |
+| ---------------- | --------------------------------------- |
+| Rename           | Inline edit on the tab label            |
+| Pin / Unpin      | Toggle `pinned` flag                    |
+| Duplicate        | Creates a new tab with the same content |
+| Move to first    | Sets `order: 0`, shifts others          |
+| Close            | Disabled if pinned                      |
+| Close all others | Skips pinned tabs                       |
 
 ---
 
@@ -274,23 +279,37 @@ Right-click on any tab opens a menu:
 
 ```typescript
 // TrayService.ts
-const tray = new Tray(path.join(assetsPath, 'icon-tray.ico'));
-tray.setContextMenu(Menu.buildFromTemplate([
-  { label: 'Open NoteVault', click: () => win.show() },
-  { label: 'New Tab', click: () => win.webContents.send('tab:createFromTray') },
-  { type: 'separator' },
-  // Pinned tabs injected dynamically
-  ...pinnedTabs.map(t => ({ label: t.label, click: () => { win.show(); win.webContents.send('tab:focus', t.id); } })),
-  { type: 'separator' },
-  { label: 'Quit', click: () => app.quit() },
-]));
+const tray = new Tray(path.join(assetsPath, "icon-tray.ico"));
+tray.setContextMenu(
+  Menu.buildFromTemplate([
+    { label: "Open NoteVault", click: () => win.show() },
+    {
+      label: "New Tab",
+      click: () => win.webContents.send("tab:createFromTray"),
+    },
+    { type: "separator" },
+    // Pinned tabs injected dynamically
+    ...pinnedTabs.map((t) => ({
+      label: t.label,
+      click: () => {
+        win.show();
+        win.webContents.send("tab:focus", t.id);
+      },
+    })),
+    { type: "separator" },
+    { label: "Quit", click: () => app.quit() },
+  ]),
+);
 ```
 
 When the window is closed and `closeToTray` is `true` (default), the app hides instead of quitting:
 
 ```typescript
-win.on('close', (e) => {
-  if (settings.closeToTray) { e.preventDefault(); win.hide(); }
+win.on("close", (e) => {
+  if (settings.closeToTray) {
+    e.preventDefault();
+    win.hide();
+  }
 });
 ```
 
@@ -298,26 +317,26 @@ win.on('close', (e) => {
 
 ## Keyboard Shortcuts (Phase 1)
 
-| Shortcut | Action | Handler |
-|---|---|---|
-| `Ctrl+T` | New tab | App |
-| `Ctrl+W` | Close current tab (no-op if pinned) | App |
-| `Ctrl+Tab` | Next tab | App |
-| `Ctrl+Shift+Tab` | Previous tab | App |
-| `Ctrl+1…9` | Jump to tab N | App |
-| `Ctrl+H` | Find & Replace | **Monaco native** |
-| `Ctrl+G` | Go to line | **Monaco native** |
-| `Alt+↑/↓` | Move line up/down | **Monaco native** |
-| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo | **Monaco native** |
-| `Ctrl+Shift+N` | Global: show/focus window | Electron globalShortcut |
-| `Alt+F4` | Close to tray | App |
+| Shortcut            | Action                              | Handler                 |
+| ------------------- | ----------------------------------- | ----------------------- |
+| `Ctrl+T`            | New tab                             | App                     |
+| `Ctrl+W`            | Close current tab (no-op if pinned) | App                     |
+| `Ctrl+Tab`          | Next tab                            | App                     |
+| `Ctrl+Shift+Tab`    | Previous tab                        | App                     |
+| `Ctrl+1…9`          | Jump to tab N                       | App                     |
+| `Ctrl+H`            | Find & Replace                      | **Monaco native**       |
+| `Ctrl+G`            | Go to line                          | **Monaco native**       |
+| `Alt+↑/↓`           | Move line up/down                   | **Monaco native**       |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo                         | **Monaco native**       |
+| `Ctrl+Shift+N`      | Global: show/focus window           | Electron globalShortcut |
+| `Alt+F4`            | Close to tray                       | App                     |
 
 **`Ctrl+P` conflict:** Monaco binds this to "Go to file". Override it on mount:
+
 ```typescript
-editor.addCommand(
-  monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyP,
-  () => { /* open command palette — wired in Phase 4 */ }
-);
+editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyP, () => {
+  /* open command palette — wired in Phase 4 */
+});
 ```
 
 ---
@@ -346,18 +365,18 @@ editor.addCommand(
 
 ```css
 :root {
-  --color-bg: transparent;              /* Mica shows through */
-  --color-surface: rgba(255,255,255,0.06);
-  --color-border: rgba(255,255,255,0.10);
-  --color-text-primary: #E8E8E8;
+  --color-bg: transparent; /* Mica shows through */
+  --color-surface: rgba(255, 255, 255, 0.06);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-text-primary: #e8e8e8;
   --color-text-muted: #888888;
-  --color-accent: env(--system-accent, #0078D4); /* Windows accent color */
+  --color-accent: env(--system-accent, #0078d4); /* Windows accent color */
   --tab-height: 36px;
   --statusbar-height: 24px;
   --titlebar-height: 32px;
   --radius-sm: 4px;
   --radius-md: 8px;
-  --font-ui: 'Segoe UI Variable', 'Segoe UI', sans-serif;
+  --font-ui: "Segoe UI Variable", "Segoe UI", sans-serif;
 }
 ```
 

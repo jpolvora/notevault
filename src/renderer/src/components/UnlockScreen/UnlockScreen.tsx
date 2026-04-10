@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import styles from './UnlockScreen.module.css';
+import React, { useState, useEffect } from "react";
+import styles from "./UnlockScreen.module.css";
 
 interface UnlockScreenProps {
   onUnlocked: () => void;
 }
 
 const UnlockScreen: React.FC<UnlockScreenProps> = ({ onUnlocked }) => {
-  const [passphrase, setPassphrase] = useState('');
-  const [error, setError] = useState('');
+  const [passphrase, setPassphrase] = useState("");
+  const [error, setError] = useState("");
   const [attempts, setAttempts] = useState(0);
   const [cooldown, setCooldown] = useState(0);
 
@@ -30,18 +30,18 @@ const UnlockScreen: React.FC<UnlockScreenProps> = ({ onUnlocked }) => {
       if (result.ok) {
         onUnlocked();
       } else {
-        setError(result.error || 'Incorrect passphrase');
+        setError(result.error || "Incorrect passphrase");
         const nextAttempts = attempts + 1;
         setAttempts(nextAttempts);
-        setPassphrase('');
-        
+        setPassphrase("");
+
         if (nextAttempts >= 5) {
           setCooldown(30);
           setAttempts(0);
         }
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred');
+      setError(err.message || "An error occurred");
     }
   };
 
@@ -49,13 +49,13 @@ const UnlockScreen: React.FC<UnlockScreenProps> = ({ onUnlocked }) => {
     try {
       const result = await window.api.importVault();
       if (result.ok) {
-        alert('Vault imported successfully!');
+        alert("Vault imported successfully!");
         onUnlocked(); // Effectively reload
       } else if (!result.cancelled) {
-        setError(result.error || 'Failed to import vault');
+        setError(result.error || "Failed to import vault");
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred during import');
+      setError(err.message || "An error occurred during import");
     }
   };
 
@@ -65,34 +65,37 @@ const UnlockScreen: React.FC<UnlockScreenProps> = ({ onUnlocked }) => {
         <div className={styles.icon}>🔒</div>
         <h1 className={styles.title}>NoteVault</h1>
         <p className={styles.subtitle}>Your vault is encrypted.</p>
-        
+
         <form onSubmit={handleUnlock} className={styles.form}>
           <input
             type="password"
             placeholder="Enter passphrase..."
-            className={`${styles.input} ${error ? styles.inputError : ''}`}
+            className={`${styles.input} ${error ? styles.inputError : ""}`}
             value={passphrase}
             onChange={(e) => {
               setPassphrase(e.target.value);
-              setError('');
+              setError("");
             }}
             disabled={cooldown > 0}
             autoFocus
           />
-          
+
           <button
             type="submit"
             className={styles.button}
             disabled={cooldown > 0 || !passphrase}
           >
-            {cooldown > 0 ? `Try again in ${cooldown}s` : 'Unlock'}
+            {cooldown > 0 ? `Try again in ${cooldown}s` : "Unlock"}
           </button>
         </form>
-        
+
         {error && <p className={styles.errorText}>{error}</p>}
-        
+
         <div className={styles.footer}>
-          Forgot passphrase? <button className={styles.link} onClick={handleImport}>Import backup</button>
+          Forgot passphrase?{" "}
+          <button className={styles.link} onClick={handleImport}>
+            Import backup
+          </button>
         </div>
       </div>
     </div>
