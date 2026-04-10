@@ -9,43 +9,82 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    runs-on: windows-latest
+  prepare-release:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm install
 
       - name: Increment version
-        id: versioning
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           npm version patch -m "chore(release): %s [skip ci]"
-          echo "NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+          git push origin main --tags
 
-      - name: Build and Publish
+  build:
+    needs: prepare-release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo snap install snapcraft --classic
+          sudo apt-get update
+          sudo apt-get install -y fakeroot dpkg
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and Publish (Windows)
+        if: matrix.os == 'windows-latest'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run package:win -- --publish always
 
-      - name: Upload Build Artifact
-        if: always()
-        uses: actions/upload-artifact@v7
+      - name: Build and Publish (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run package:linux -- --publish always
+
+      - name: Upload Build Artifact (Windows)
+        if: always() && matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
         with:
           name: NoteVault-Windows-Installer
           path: dist/*.exe
           retention-days: 7
 
-      - name: Push version changes
-        run: git push origin main --tags
+      - name: Upload Build Artifact (Linux)
+        if: always() && matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: NoteVault-Linux-Installer
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.snap
+          retention-days: 7
